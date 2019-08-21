@@ -27,16 +27,6 @@ namespace KitchenScreenClient
             InitializeComponent();
             m_client = new HiawathaSocketClient(this);
             m_screenManager = new ScreenView(flpScreenFlow);
-            //AddTestStuff();
-        }
-
-        private void AddTestStuff()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                m_customerOrders.Add(new OnScreenOrder());
-            }
-            UpdateScreenView();
         }
 
         private void Btn_BumpViaNumbers(object sender, EventArgs e)
@@ -73,24 +63,7 @@ namespace KitchenScreenClient
         {
             lbConnectionEstablished.Text = m_client.IsConnected() ? @"Connection Established!" : @"Connection Failed to Establish....";
         }
-        private void UpdateScreenView()
-        {
-            m_screenManager.ClearScreenForRefresh();
-
-            for (int i = 0; i < m_customerOrders.Count; i++)
-            {
-                if (i == m_screenManager.CursorPosition)
-                {
-                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Tan);
-                }
-                else
-                {
-                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Empty);
-                }
-                
-            }
-
-        }
+        
         public void ConvertDataFromPoSIntoScreenElement(string a_message)
         {
             OnScreenOrder newOnScreenOrder = new OnScreenOrder();
@@ -112,5 +85,25 @@ namespace KitchenScreenClient
             m_screenManager.CursorPosition = m_cursorSelectionPostion;
             UpdateScreenView();
         }
+
+        private void UpdateScreenView()
+        {
+            m_screenManager.ClearScreenForRefresh();
+
+            for (int i = 0; i < m_customerOrders.Count; i++)
+            {
+                if (i == m_screenManager.CursorPosition)
+                {
+                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Tan);
+                }
+                else
+                {
+                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Empty);
+                }
+
+            }
+
+        }
     }
+
 }

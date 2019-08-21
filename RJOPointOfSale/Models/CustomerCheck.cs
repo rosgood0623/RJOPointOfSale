@@ -38,11 +38,6 @@ namespace RJOPointOfSale
             return m_customerOrders.ElementAt(a_index);
         }
 
-        public KidsMeal GetKidsMealAtIndex(int a_index)
-        {
-            return (KidsMeal)m_customerOrders.ElementAt(a_index);
-        }
-
         public void DeleteMealAtIndex(int a_index)
         {
             m_customerOrders.RemoveAt(a_index);

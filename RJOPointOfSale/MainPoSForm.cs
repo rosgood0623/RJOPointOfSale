@@ -335,7 +335,6 @@ namespace RJOPointOfSale
             if (determineIfKidsMeal)
             {
                 KidsMeal chosenKidsMeal = (KidsMeal) m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(mealTuple.Item1);
-                //KidsMeal chosenKidsMeal = m_customerChecks[m_currentlySelectedTab].GetKidsMealAtIndex(mealTuple.Item1);
                 KidsMealModification kmm = new KidsMealModification(chosenKidsMeal);
                 kmm.ShowDialog();
                 UpdateDisplay();
@@ -352,20 +351,45 @@ namespace RJOPointOfSale
         private void BtnDeleteItem_Click(object sender, EventArgs e)
         {
             Tuple<int, int> mealTuple = GetDisplaySelection();
-            bool determineIfKidsMeal = DetermineIfKidsMeal(mealTuple.Item1);
+            bool voidOrDelete = DetermineIfVoidOrDelete(mealTuple.Item1);
 
-            if (determineIfKidsMeal)
+            if (voidOrDelete)
             {
-                DeleteKidsMealAtIndex(mealTuple.Item1);
+                //void
+                //1) Get selected item
+                //2) Parse into string attributes
+                //3) listOfItems.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
+                //4) Add a VOID command at the front of the attributes.
             }
             else
             {
-                DeleteItemWithinMealAtIndex(mealTuple);
+                DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
             }
             
             m_customerChecks[m_currentlySelectedTab].ClearEmptyMeals();
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
 
+        }
+
+        private bool DetermineIfVoidOrDelete(int a_mealIndex)
+        {
+            CustomerCheck currentlySelectedCheck = m_customerChecks.ElementAt(m_currentlySelectedTab);
+            Meal currentlySelectedMeal = currentlySelectedCheck.GetMealAtIndex(a_mealIndex);
+            return currentlySelectedMeal.SentFlag;
+        }
+
+        private void DeleteItemOnTill(int a_mealIndex, int a_itemIndex)
+        {
+            bool determineIfKidsMeal = DetermineIfKidsMeal(a_mealIndex);
+
+            if (determineIfKidsMeal)
+            {
+                DeleteKidsMealAtIndex(a_mealIndex);
+            }
+            else
+            {
+                DeleteItemWithinMealAtIndex(a_mealIndex, a_itemIndex);
+            }
         }
 
         private void DeleteKidsMealAtIndex(int a_index)
@@ -389,18 +413,18 @@ namespace RJOPointOfSale
             return mealTuple;
         }
 
-        private void DeleteItemWithinMealAtIndex(Tuple<int, int> a_mealTuple)
+        private void DeleteItemWithinMealAtIndex(int a_mealIndex, int a_itemIndex)
         {
-            switch (a_mealTuple.Item2)
+            switch (a_itemIndex)
             {
                 case m_removeEntree:
-                    m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealTuple.Item1).RemoveEntree();
+                    m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).RemoveEntree();
                     break;
                 case m_removeSide:
-                    m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealTuple.Item1).RemoveSide();
+                    m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).RemoveSide();
                     break;
                 case m_removeBeverage:
-                    m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealTuple.Item1).RemoveBeverage();
+                    m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).RemoveBeverage();
                     break;
             }
         }
@@ -478,7 +502,6 @@ namespace RJOPointOfSale
             
             
         }
-
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Hide();
@@ -516,6 +539,11 @@ namespace RJOPointOfSale
             m_server.SendToAll(toBeSent);
             m_numOfSentLines = m_customerCheckView.GetCountInDisplayOfSentItems();
             UpdateDisplay();
+        }
+
+        private void SendVoidCommandOfSelectedItemToClients()
+        {
+
         }
 
         private void FlagMealsOnTillAsSent()

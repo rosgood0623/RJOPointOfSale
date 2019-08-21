@@ -31,22 +31,6 @@ namespace HiawathaSocketAsync
             m_screen = a_screen;
         }
 
-        public IPAddress ServerIPAdress
-        {
-            get
-            {
-                return mServerIPAddress;
-            }
-        }
-
-        public int ServerPort
-        {
-            get
-            {
-                return mServerPort;
-            }
-        }
-
         public bool SetServerIPAddress(string _IPAddressServer)
         {
             IPAddress ipaddr;
@@ -63,9 +47,7 @@ namespace HiawathaSocketAsync
 
         public bool SetPortNumber(string a_serverPort)
         {
-            int portNumber = 0;
-
-            if(!int.TryParse(a_serverPort, out portNumber))
+            if(!int.TryParse(a_serverPort, out var portNumber))
             {
                 Console.WriteLine(@"Invalid server port number.");
                 return false;
