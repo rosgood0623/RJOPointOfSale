@@ -22,11 +22,30 @@ namespace HiawathaSocketAsync
 
         public bool KeepRunning { get; set; }
 
+        /// <summary>
+        /// The default constructor of the HiawathaSocketServer object.
+        /// Inits the clients list.
+        /// </summary>
+        /// <remarks>
+        /// NAME: HiawathaSocketServer
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
         public HiawathaSocketServer()
         {
             mClients = new List<TcpClient>();
-        }
+        }/*HiawathaSocketServer()*/
 
+        /// <summary>
+        /// Raises a customer event for when a Client has connected to the server.
+        /// Used mostly for debugging.
+        /// </summary>
+        /// <remarks>
+        /// NAME: OnRaiseClientConnectedEvent
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="e">The custom ClientConnectEventArgs associated with this event.</param>
         protected virtual void OnRaiseClientConnectedEvent(ClientConnectedEventArgs e)
         {
             EventHandler<ClientConnectedEventArgs> handler = RaiseClientConnectedEvent;
@@ -35,16 +54,27 @@ namespace HiawathaSocketAsync
             {
                 handler(this, e);
             }
-        }
+        }/*OnRaiseClientConnectedEvent(ClientConnectedEventArgs e)*/
 
+        /// <summary>
+        /// An asynchronous method to handle and allow the connection of any Clients
+        /// that ping the server.
+        /// </summary>
+        /// <remarks>
+        /// NAME: StartListeningForIncomingConnection
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="a_ipaddr">The IP Address to listen on.</param>
+        /// <param name="a_port"> The port number to listen on.</param>
         public async void StartListeningForIncomingConnection(IPAddress a_ipaddr = null, int a_port = 23000)
         {
-            if(a_ipaddr == null)
+            if (a_ipaddr == null)
             {
                 a_ipaddr = IPAddress.Any;
             }
 
-            if(a_port <= 0)
+            if (a_port <= 0)
             {
                 a_port = 23000;
             }
@@ -74,37 +104,25 @@ namespace HiawathaSocketAsync
                     ClientConnectedEventArgs eaClientConnected = new ClientConnectedEventArgs(returnedByAccept.Client.RemoteEndPoint.ToString());
                     OnRaiseClientConnectedEvent(eaClientConnected);
                 }
-                
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
             }
 
-        }
+        } /*StartListeningForIncomingConnection(IPAddress a_ipaddr = null, int a_port = 23000)*/
 
-        public void StopServer()
-        {
-            try
-            {
-                if(m_TCPListener != null)
-                {
-                    m_TCPListener.Stop();
-                }
-
-                foreach(TcpClient c in mClients)
-                {
-                    c.Close();
-                }
-
-                mClients.Clear();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-            }
-        }
-
+        /// <summary>
+        /// This asynchronous method handles any data that might be sent from
+        /// the specified client. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: TakeCareOfTCPClient
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="a_paramClient">The client the server is receiving data from.</param>
         private async void TakeCareOfTCPClient(TcpClient a_paramClient)
         {
             NetworkStream stream = null;
@@ -125,7 +143,7 @@ namespace HiawathaSocketAsync
 
                     Debug.WriteLine("Returned: " + nRet);
 
-                    if(nRet == 0)
+                    if (nRet == 0)
                     {
                         RemoveClient(a_paramClient);
                         Debug.WriteLine("Socket disconnected");
@@ -139,13 +157,22 @@ namespace HiawathaSocketAsync
                     Array.Clear(buff, 0, buff.Length);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 RemoveClient(a_paramClient);
                 Debug.WriteLine(ex.ToString());
             }
-        }
+        } /*TakeCareOfTCPClient(TcpClient a_paramClient)*/
 
+        /// <summary>
+        /// Removes the target client from the client list. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: RemoveClient
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="paramClient">The client to be removed.</param>
         private void RemoveClient(TcpClient paramClient)
         {
             if (mClients.Contains(paramClient))
@@ -153,11 +180,20 @@ namespace HiawathaSocketAsync
                 mClients.Remove(paramClient);
                 Debug.WriteLine("Client removed, count: {0}", mClients.Count);
             }
-        }
+        }/*RemoveClient(TcpClient paramClient)*/
 
+        /// <summary>
+        /// An asynchonous method to send any data to all connected clients.
+        /// </summary>
+        /// <remarks>
+        /// NAME: SendToAll
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="leMessage">The raw data to send to the clients.</param>
         public async void SendToAll(string leMessage)
         {
-            if(string.IsNullOrEmpty(leMessage))
+            if (string.IsNullOrEmpty(leMessage))
             {
                 return;
             }
@@ -166,15 +202,15 @@ namespace HiawathaSocketAsync
             {
                 byte[] buffMessage = Encoding.ASCII.GetBytes(leMessage);
 
-                foreach(TcpClient c in mClients)
+                foreach (TcpClient c in mClients)
                 {
                     await c.GetStream().WriteAsync(buffMessage, 0, buffMessage.Length);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
             }
-        }
+        }/*SendToAll(string leMessage)*/
     }
 }
