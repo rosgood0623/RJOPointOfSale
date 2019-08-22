@@ -16,6 +16,15 @@ namespace RJOPointOfSale
             return 0;
         }
 
+        /// <summary>
+        /// Queries the database for the name of the beverage from the MainPoSForm
+        /// </summary>
+        /// <remarks>
+        /// NAME: RetrieveSideFromDb
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/15/2019
+        /// </remarks>
+        /// <param name="a_productName">The desired side name to query the database with.</param>
         public void RetrieveSideFromDb(string a_productName)
         {
             try
@@ -38,7 +47,7 @@ namespace RJOPointOfSale
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
+            }/*public void RetrieveSideFromDb(string a_productName)*/
         }
 
     }

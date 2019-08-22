@@ -16,6 +16,15 @@ namespace RJOPointOfSale
             return 0;
         }
 
+        /// <summary>
+        /// Queries the database for the name of the beverage from the MainPoSForm
+        /// </summary>
+        /// <remarks>
+        /// NAME: RetrieveBevFromDb
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_productName">The desired beverage to query the database with.</param>
         public void RetrieveBevFromDb(string a_productName)
         {
             try
@@ -39,6 +48,6 @@ namespace RJOPointOfSale
             {
                 MessageBox.Show(ex.Message);
             }
-        }
+        }/*public void RetrieveBevFromDb(string a_productName)*/
     }
 }

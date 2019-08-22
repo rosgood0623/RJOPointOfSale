@@ -43,16 +43,45 @@ namespace RJOPointOfSale
 
         private RadioButton m_selectedSignature;
 
+        /// <summary>
+        /// The default constructor for the main register menu. 
+        /// </summary>
+        /// //<remarks>
+        /// NAME: MainPoSForm
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         public MainPoSForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// A constructor for the main register menu that retrieves the employee code from the passcode form.
+        /// </summary>
+        /// <remarks>
+        /// NAME: MainPoSForm
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_enteredCode"> The employees code as an integer</param>
         public MainPoSForm(int a_enteredCode) : this()
         {
             m_employeeCode = a_enteredCode;
         }
 
+        /// <summary>
+        /// The Load event for the main register menu. This event is raised whenever the form is constructed
+        /// This method sets up the menu for use: Generates the default check and its representative button,
+        /// establishes connection with the database and sets the Listbox's datasource to the BindingList
+        /// </summary>
+        /// //<remarks>
+        /// NAME: MainPoSForm_Load
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender"> The object that the event is attached to </param>
+        /// <param name="e"> The EventArgs of the rasied event. </param>
         private void MainPoSForm_Load(object sender, EventArgs e)
         {
             Button defaultTabButton = new Button
@@ -77,9 +106,21 @@ namespace RJOPointOfSale
             RecognizeEmployeeTitle();
 
             lbCustomerCheck.DataSource = m_customerCheckView.GetItemsForDisplay();
-            
+
         }
 
+        /// <summary>
+        /// This click event is raised whenever the user wants to create a new customer tab.
+        /// A customer check object is created along with its representative button. Only 
+        /// allows up to 5 tabs max.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnNewTab_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event</param>
+        /// <param name="e">The EventArgs of the raised event</param>
         private void BtnNewTab_Click(object sender, EventArgs e)
         {
             if (m_customerTabsButtons.Count < m_maximumTabCount)
@@ -90,7 +131,7 @@ namespace RJOPointOfSale
                 {
                     Size = new Size(m_buttonSizeX, m_buttonSizeY),
                     Location = new Point(m_buttonLocationFormatter, 10)
-                    
+
                 };
 
                 newButton.Click += BtnTabInfo_Click;
@@ -100,7 +141,7 @@ namespace RJOPointOfSale
 
                 CustomerCheck newCheck = new CustomerCheck();
                 m_customerChecks.Add(newCheck);
-                
+
                 m_customerTabsButtons.Add(newButton);
                 flpTabs.Controls.Add(newButton);
             }
@@ -108,9 +149,21 @@ namespace RJOPointOfSale
             {
                 MessageBox.Show(@"Maximum tab capacity reached.");
             }
-            
+
         }
 
+        /// <summary>
+        /// A click event that is raised whenever the user clicks tab.
+        /// The Listbox is updated with that tabs information and the user can proceed with
+        /// adding new items to that check
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnTabInfo_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event</param>
+        /// <param name="e">The EventArgs associated with the event</param>
         private void BtnTabInfo_Click(object sender, EventArgs e)
         {
             Button currentButton = sender as Button;
@@ -119,14 +172,25 @@ namespace RJOPointOfSale
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
         }
 
+        /// <summary>
+        /// The event raised whenever the user instructs the PoS to close a tab. 
+        /// Will always sustains at least one tab.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnCloseTab_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event</param>
+        /// <param name="e"> The EventArgs associated with the event</param>
         private void BtnCloseTab_Click(object sender, EventArgs e)
         {
-            if(m_customerTabsButtons.Count == 1 && m_currentlySelectedTab == 0) { return; }
+            if (m_customerTabsButtons.Count == 1 && m_currentlySelectedTab == 0) { return; }
 
-            for(int i = 0; i < m_customerTabsButtons.Count; i++)
+            for (int i = 0; i < m_customerTabsButtons.Count; i++)
             {
                 Button temp = m_customerTabsButtons[i];
-                if((int)temp.Tag == m_currentlySelectedTab)
+                if ((int)temp.Tag == m_currentlySelectedTab)
                 {
                     temp = m_customerTabsButtons[i];
                     flpTabs.Controls.Remove(temp);
@@ -134,14 +198,24 @@ namespace RJOPointOfSale
                     m_customerChecks.RemoveAt(i);
                 }
             }
-            
+
             RedefineButtonTags();
         }
 
+        /// <summary>
+        /// Iterates through the list of currently open tabs and redefine's their tags.
+        /// Is called when the number of open tabs are modified. Important to ensure Model/View
+        /// synchronicity
+        /// </summary>
+        /// <remarks>
+        /// NAME: RedefineButtonTags
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void RedefineButtonTags()
         {
             int tagRedefinition = 0;
-            foreach(Button b in m_customerTabsButtons)
+            foreach (Button b in m_customerTabsButtons)
             {
                 b.Tag = tagRedefinition;
                 tagRedefinition++;
@@ -149,6 +223,16 @@ namespace RJOPointOfSale
             m_buttonID = tagRedefinition;
         }
 
+        /// <summary>
+        /// Queries the database for the employees information
+        /// Retrieves the information based on the employee code used to access the register.
+        /// Used to display the employees name
+        /// </summary>
+        /// <remarks>
+        /// NAME: RecognizeEmployee
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void RecognizeEmployee()
         {
             try
@@ -172,9 +256,19 @@ namespace RJOPointOfSale
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
+        /// <summary>
+        /// Queries database to for employee information
+        /// Retrieves the information based on the employee code used the access the register.
+        /// Used to retrieve the employees Title
+        /// </summary>
+        /// <remarks>
+        /// NAME: RecognizeEmployeeTitle
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void RecognizeEmployeeTitle()
         {
             try
@@ -198,9 +292,17 @@ namespace RJOPointOfSale
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
+        /// <summary>
+        /// Establishes the connection with the database.
+        /// </summary>
+        /// <remarks>
+        /// NAME: InitializeDatabaseConnection
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void InitializeDatabaseConnection()
         {
             try
@@ -214,6 +316,17 @@ namespace RJOPointOfSale
             }
         }
 
+        /// <summary>
+        /// This event is raised whenever the user wants to add a check identifier to the tab.
+        /// A keyboard form is constructed for input.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnSetCheckName_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender"> The button that raised the event</param>
+        /// <param name="e">The EventArgs of the event</param>
         private void BtnSetCheckName_Click(object sender, EventArgs e)
         {
             Button selectedTab = m_customerTabsButtons[m_currentlySelectedTab];
@@ -225,27 +338,50 @@ namespace RJOPointOfSale
             selectedTab.Text = checkAtSelectedTab.Name;
         }
 
+        /// <summary>
+        /// This event is raised whenever the user chooses a signature sandwich.
+        /// The radio button is saved for when the customer chooses a protien option
+        /// </summary>
+        /// <remarks>
+        /// NAME: RadioButtonSelection_CheckedChanged
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The radio button that raised the event</param>
+        /// <param name="e"> The EventArgs of the event</param>    
         private void RadioButtonSelection_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton selection = sender as RadioButton;
-        
+
             if (selection.Checked)
             {
                 m_selectedSignature = selection;
             }
         }
 
+        /// <summary>
+        /// This event is raised whenever the user selects a protien option. If a signature hasn't 
+        /// been selected yet, return. Otherwise, create the desired Entree object by retrieving 
+        /// the sandwiches attributes from the database.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnSignatureAndProteinSelection_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised this event</param>
+        /// <param name="e">The EventArgs of the event</param>
         private void BtnSignatureAndProteinSelection_Click(object sender, EventArgs e)
         {
             if (m_selectedSignature == null) { return; }
 
             Button proteinButton = sender as Button;
             Entree signature = new Entree();
-            
+
             //On the menu, The Classic Signature is the only sandwich which recipe differs depending on the protein selection.
             //This feels like an iffy way to do it, but in the interest of keeping a generic method for ringing up a sandwich,
             //this is the best solution I could think of at the time I fleshed out this part of the project.
-            
+
             if (proteinButton.Text.Equals("Grilled") && m_selectedSignature.Text.Equals("Classic Smash"))
             {
                 //Since there is no "Classic Chicken" button, I just need to pass "ClassicChicken" so the db knows to get the chicken version of this signature
@@ -271,6 +407,18 @@ namespace RJOPointOfSale
             UpdateDisplay();
         }
 
+        /// <summary>
+        /// This event is raised when any of the Kids Meal options are selected. 
+        /// The database is queried for the details of the meal using the 
+        /// button's respective tag and the meal is added to the check
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnKidsMeals_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event</param>
+        /// <param name="e">The EventArgs of the event</param>       
         private void BtnKidsMeals_Click(object sender, EventArgs e)
         {
             Button kidsMealButton = sender as Button;
@@ -288,6 +436,18 @@ namespace RJOPointOfSale
 
         }
 
+        /// <summary>
+        /// This event is raised whenever the user selects a side. The database is queried for that 
+        /// side's information using the button's respective tag and the side is added to the check.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnSideSelection_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event</param>
+        /// <param name="e"> The EventArgs of the event</param>
+
         private void BtnSideSelection_Click(object sender, EventArgs e)
         {
             Button sideSelection = sender as Button;
@@ -298,6 +458,18 @@ namespace RJOPointOfSale
 
             UpdateDisplay();
         }
+
+        /// <summary>
+        /// This event is raised whenever the user selects any of the beverage buttons.
+        /// The database is queried using the button's respective tag and the item is added to the check.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnBeverageSelection_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event.</param>
+        /// <param name="e">The EventArgs of the event.</param>
 
         private void BtnBeverageSelection_Click(object sender, EventArgs e)
         {
@@ -310,17 +482,47 @@ namespace RJOPointOfSale
             UpdateDisplay();
         }
 
+        /// <summary>
+        /// Updates the view of the Listbox that represents the check's order information.
+        /// </summary>
+        /// <remarks>
+        /// NAME: UpdateDisplay
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void UpdateDisplay()
         {
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// NAME: LbCustomerCheck_Format
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The object that triggers the event</param>
+        /// <param name="e">The EventArgs object related to the Format event</param>    
         private void LbCustomerCheck_Format(object sender, ListControlConvertEventArgs e)
         {
             //string toBeFormatted = e.ListItem.ToString();
             //string[] values = toBeFormatted.Split('\n');
         }
 
+        /// <summary>
+        /// Handles the logic for when the user selects an item in the check for modification.
+        /// Depending on the Meal type, open it's respective modification form to edit the attributes 
+        /// of that item.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnModify_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event</param>
+        /// <param name="e">The EventArgs of the event</param>
         private void BtnModify_Click(object sender, EventArgs e)
         {
             Tuple<int, int> mealTuple = GetDisplaySelection();
@@ -334,7 +536,7 @@ namespace RJOPointOfSale
 
             if (determineIfKidsMeal)
             {
-                KidsMeal chosenKidsMeal = (KidsMeal) m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(mealTuple.Item1);
+                KidsMeal chosenKidsMeal = (KidsMeal)m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(mealTuple.Item1);
                 KidsMealModification kmm = new KidsMealModification(chosenKidsMeal);
                 kmm.ShowDialog();
                 UpdateDisplay();
@@ -348,6 +550,17 @@ namespace RJOPointOfSale
 
         }
 
+        /// <summary>
+        /// Handles the initial logic for deleting an item from the customer's check. If the user selected a 
+        /// KidsMeal, delete all related menu items. Else, just delete the selected item.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnDeleteItem_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that raised the event.</param>
+        /// <param name="e">The EventArgs of the event.</param>
         private void BtnDeleteItem_Click(object sender, EventArgs e)
         {
             Tuple<int, int> mealTuple = GetDisplaySelection();
@@ -392,17 +605,50 @@ namespace RJOPointOfSale
             }
         }
 
+        /// <summary>
+        /// Removes the KidsMeal at the given index.
+        /// </summary>
+        /// <remarks>
+        /// NAME: DeleteKidsMealAtIndex
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_index">The index of the meal to be deleted</param>
         private void DeleteKidsMealAtIndex(int a_index)
         {
             m_customerChecks[m_currentlySelectedTab].DeleteMealAtIndex(a_index);
         }
 
+        /// <summary>
+        /// A utility method that determines if a meal at an index is a KidsMeal.
+        /// </summary>
+        /// <remarks>
+        /// NAME: DetermineIfKidsMeal
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_targetMeal">The index of the target meal</param>
+        /// <returns>
+        /// If the target meal is a KidsMeal, return true. Otherwise, return false.
+        /// </returns>
+        /// 
         private bool DetermineIfKidsMeal(int a_targetMeal)
         {
             Meal toBeDetermined = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_targetMeal);
             return toBeDetermined.IsKidsMeal();
         }
 
+        /// <summary>
+        /// Retrieves the relevant indices of the item selected in the view.
+        /// </summary>
+        /// <remarks>
+        /// NAME: GetDisplaySelection
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <returns>
+        /// A tuple that contains the index of the meal and the type of MenuItem (i.e Entree, Side, Beverage)
+        /// </returns>
         private Tuple<int, int> GetDisplaySelection()
         {
             int indexOfListBoxSelection = lbCustomerCheck.SelectedIndex;
@@ -413,6 +659,18 @@ namespace RJOPointOfSale
             return mealTuple;
         }
 
+        /// <summary>
+        /// Deletes a target item from the customer's check. The tuple contains the position 
+        /// of the meal in the customer's list, and also the type of item that needs to be deleted 
+        /// (0 = Entree, 1 = Side, 2 = Beverage).
+        /// </summary>
+        /// <remarks>
+        /// NAME: DeleteItemWithinMealAtIndex
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">A tuple containing the target meal index and target item index</param>
+        /// <param name="a_itemIndex"></param>
         private void DeleteItemWithinMealAtIndex(int a_mealIndex, int a_itemIndex)
         {
             switch (a_itemIndex)
@@ -429,11 +687,32 @@ namespace RJOPointOfSale
             }
         }
 
+        //TODO: Clear Button
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnClear_Click(object sender, EventArgs e)
         {
             //TODO: Simply clearing the check is easy, IF no orders have been sent to screen. Will come back to this later. 
         }
 
+        /// <summary>
+        /// This method is called whenever the customer's orders are drawn to the screen. Handles logic
+        /// to give a customer's check visual clarity on which orders have been sent to the screens or not.
+        /// </summary>
+        /// <remarks>
+        /// NAME: LbCustomerCheck_DrawItem
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The object that triggered the event</param>
+        /// <param name="e">The EventArgs object for formatting the view of the ListBox</param>
         private void LbCustomerCheck_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
@@ -449,9 +728,21 @@ namespace RJOPointOfSale
                 e.Graphics.DrawString(formattable, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, e.Bounds);
                 e.DrawFocusRectangle();
             }
-            
+
         }
 
+        /// <summary>
+        /// This click event is fired when the user clicks the beverage selection form.
+        /// This provides a more concise, organized way to ring up beverages, and includes 
+        /// less common beverage choices.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnBeverages_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that fired the event.</param>
+        /// <param name="e">The EventArgs object associated with the event.</param>
         private void BtnBeverages_Click(object sender, EventArgs e)
         {
             Beverage bevFromSelectionForm = new Beverage();
@@ -462,6 +753,18 @@ namespace RJOPointOfSale
             UpdateDisplay();
         }
 
+        /// <summary>
+        /// This event is a visibility event for the main form. This is primarily used to 
+        /// launch the Kitchen Screen application when the main register menu is loaded. This event 
+        /// only ever fires when the MainPoSForm is loaded from the passcode form.
+        /// </summary>
+        /// <remarks>
+        /// NAME: MainPoSForm_VisibleChanged
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The object that triggers the event.</param>
+        /// <param name="e">The EventArgs associated with the event.</param>
         private void MainPoSForm_VisibleChanged(object sender, EventArgs e)
         {
             if (m_sisterApplicationID == 0)
@@ -470,6 +773,18 @@ namespace RJOPointOfSale
             }
         }
 
+        /// <summary>
+        /// The goal of this method is to have a system-independent way to get the
+        /// path to the KitchenScreenClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ParseRelativePath
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <returns>
+        /// Returns the full relative path of the machine that the program is being ran on.
+        /// </returns>
         private string ParseRelativePath()
         {
             string startPath = Application.StartupPath;
@@ -480,6 +795,14 @@ namespace RJOPointOfSale
             return relativePath;
         }
 
+        /// <summary>
+        /// Uses the relative path from ParseRelativePath to run the KitchenScreensClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: LaunchSisterApplication
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void LaunchSisterApplication()
         {
             m_server.StartListeningForIncomingConnection();
@@ -499,9 +822,18 @@ namespace RJOPointOfSale
                 m_sisterApplicationID = sister.Id;
             }
 
-            
-            
         }
+        /// <summary>
+        /// Fires when the user clicks the Exit button. Simulates exiting but actually Hide()s.
+        /// This is to avoid the serialization of customer's orders.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnExit_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered the event.</param>
+        /// <param name="e">The EventArgs associated with the event.</param>
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Hide();
@@ -510,6 +842,15 @@ namespace RJOPointOfSale
             m_enterCodeForm.Show(this);
         }
 
+        /// <summary>
+        /// This method Kills the KitchenScreenClient executable. Used primarily when
+        /// the MainPoSForm is exited.
+        /// </summary>
+        /// <remarks>
+        /// NAME: KillSisterProcess
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void KillSisterProcess()
         {
             try
@@ -523,6 +864,17 @@ namespace RJOPointOfSale
             }
         }
 
+        /// <summary>
+        /// This click event handles the firing of the customer's orders to the 
+        /// KitchenScreenClient. Send all unsent items to the screens. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnSendOrdersOnTill_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered the event.</param>
+        /// <param name="e">The EventArgs that are associated with the event.</param>
         private void BtnSendOrdersOnTill_Click(object sender, EventArgs e)
         {
             List<string> listOfItems = new List<string>();
@@ -541,11 +893,19 @@ namespace RJOPointOfSale
             UpdateDisplay();
         }
 
-        private void SendVoidCommandOfSelectedItemToClients()
+        private void SendVoidCommandOfItemToClient()
         {
 
         }
 
+        /// <summary>
+        /// Flag all the items on the current tab as sent.
+        /// </summary>
+        /// <remarks>
+        /// NAME: FlagMealsOnTillAsSent
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
         private void FlagMealsOnTillAsSent()
         {
             CustomerCheck currentlySelected = m_customerChecks[m_currentlySelectedTab];

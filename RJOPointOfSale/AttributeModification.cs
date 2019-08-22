@@ -26,11 +26,30 @@ namespace RJOPointOfSale
         private List<Button> m_buttonAttributes;
         private RadioButton m_extraLightOnSide;
 
+        /// <summary>
+        /// The default constructor for the AttributeModification form. Initializes the components.
+        /// </summary>
+        /// <remarks>
+        /// NAME: AttributeModification
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
         public AttributeModification()
         {
             InitializeComponent();
-        }
+        }/*public AttributeModification()*/
 
+        /// <summary>
+        /// A constructor for the AttributeModification form. Inhertis from the default
+        /// constructor and passes in a Entree as an arugment.
+        /// Initializes all vital members for the entree modifications.
+        /// </summary>
+        /// <remarks>
+        /// NAME: AttributeModification
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="a_entreeFromMain">The entree to be modified.</param>
         public AttributeModification(Entree a_entreeFromMain) : this()
         {
             m_entreeToBeModified = a_entreeFromMain;
@@ -38,13 +57,21 @@ namespace RJOPointOfSale
             m_entreeView = new EntreeView(m_entreeToBeModified);
             m_entreeView.DecomposeAttributesToString();
             lbModifiedEntree.DataSource = m_entreeView.GetTextMods();
-            
+
             GenerateAttributeButtonListAndSetProperties();
             GenerateOriginalAttrs();
             CompleteButtonDisplay();
-        }
+        }/*public AttributeModification(Entree a_entreeFromMain) : this()*/
 
-        
+        /// <summary>
+        /// Gets the original attributes from the entree. This is very important for 
+        /// comparison to the user's selections.
+        /// </summary>
+        /// <remarks>
+        /// NAME: GenerateOriginalAttrs
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
         private void GenerateOriginalAttrs()
         {
             m_originalAttributes = new int[MenuItemAttributes.NumOfAttributes];
@@ -53,16 +80,25 @@ namespace RJOPointOfSale
             {
                 m_originalAttributes[i] = m_entreeToBeModified.GetOriginalAttrAtIndex(i);
             }
-        }
+        }/*private void GenerateOriginalAttrs()*/
 
+        /// <summary>
+        /// Updates the each attribute button's background to accurately 
+        /// reflect the status of the attributes. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: CompleteButtonDisplay
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
         private void CompleteButtonDisplay()
         {
             for (int i = 1; i < m_buttonAttributes.Count - m_excludeProteinOptions; i++)
             {
                 if (m_attributes[i] != m_emptyAttribute)
                 {
-                    m_buttonAttributes[i-1].BackgroundImage = Resources.green_check_icon_png_4;
-                    m_buttonAttributes[i-1].BackgroundImageLayout = ImageLayout.Stretch;
+                    m_buttonAttributes[i - 1].BackgroundImage = Resources.green_check_icon_png_4;
+                    m_buttonAttributes[i - 1].BackgroundImageLayout = ImageLayout.Stretch;
                 }
                 else if (m_attributes[i] == m_emptyAttribute && m_originalAttributes[i] == m_hasAttributeFlag)
                 {
@@ -70,8 +106,18 @@ namespace RJOPointOfSale
                     m_buttonAttributes[i - 1].BackgroundImageLayout = ImageLayout.Stretch;
                 }
             }
-        }
+        }/*private void CompleteButtonDisplay()*/
 
+        /// <summary>
+        /// Adds the attribute buttons to a list to make for convenient 
+        /// future manipulation. The buttons are ordered with respect to
+        /// the order of the attributes array.
+        /// </summary>
+        /// <remarks>
+        /// NAME: GenerateAttributeButtonListAndSetProperties
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
         private void GenerateAttributeButtonListAndSetProperties()
         {
             m_buttonAttributes = new List<Button>
@@ -90,21 +136,47 @@ namespace RJOPointOfSale
             {
                 button.BackgroundImageLayout = ImageLayout.Stretch;
             }
+        }/*private void GenerateAttributeButtonListAndSetProperties()*/
 
-
-        }
-
+        /// <summary>
+        /// A generic click event for the action modification buttons. 
+        /// Adds the text of the selected action mod to the entree's action mod 
+        /// list.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnAddActionModification
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered this event - the action mods buttons.</param>
+        /// <param name="e">The EventArgs associated with this event.</param>
         private void BtnAddActionModification(object sender, EventArgs e)
         {
             Button actMod = sender as Button;
             m_entreeToBeModified.AddActionMod(actMod.Text);
             m_entreeView.DecomposeAttributesToString();
-        }
+        }/*private void BtnAddActionModification(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// This method handles the logic for adding protein options to the entree.
+        /// The aspect of this logic that takes up the most space is Single vs Double
+        /// beef sandwich. See remarks for more.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnAddProtein_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// The reason why the beef sandwiches takes up the most logic is because
+        /// there is an attribute for a Single patty and Double patty. Adding a beef patty
+        /// to a double to make a triple is an entirely separate set of logic when adding a single
+        /// patty to a single sandwich
+        /// </remarks>
+        /// <param name="sender">The button that triggered the event - any of the protein addtion buttons.</param>
+        /// <param name="e">The EventArgs associated with the event.</param>
         private void BtnAddProtein_Click(object sender, EventArgs e)
         {
             Button addProtein = sender as Button;
-            string buttonTag = (string) addProtein.Tag;
+            string buttonTag = (string)addProtein.Tag;
 
             if (buttonTag.Equals("Beef") && !m_entreeToBeModified.EntreeIdentifier.Contains("Double"))
             {
@@ -132,8 +204,19 @@ namespace RJOPointOfSale
             }
 
             m_entreeView.DecomposeAttributesToString();
-        }
+        }/*private void BtnAddProtein_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// This method handles the logic for subtracting protein options for
+        /// a sandwich. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnSubProtein_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered this event - the protein subtraction buttons.</param>
+        /// <param name="e">The EventArgs associated with this event.</param>
         private void BtnSubProtein_Click(object sender, EventArgs e)
         {
             Button addProtein = sender as Button;
@@ -153,7 +236,6 @@ namespace RJOPointOfSale
             if (buttonTag.Equals("Beef") && m_attributes[MenuItemAttributes.SandwichBeefSingle] >= 1)
             {
                 m_attributes[MenuItemAttributes.SandwichBeefSingle]--;
-               
             }
             else if (buttonTag.Equals("Crispy") && m_attributes[MenuItemAttributes.SandwichCrispyChicken] >= 1)
             {
@@ -169,8 +251,19 @@ namespace RJOPointOfSale
             }
 
             m_entreeView.DecomposeAttributesToString();
-        }
+        }/*private void BtnSubProtein_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// The click event for signifying that there is no protein on the sandwich. 
+        /// This method clears all protein related attributes in the attribute array.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnNoMeat_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered the event - the NO MEAT button.</param>
+        /// <param name="e">The EventArgs associated with this event.</param>
         private void BtnNoMeat_Click(object sender, EventArgs e)
         {
             for (int i = MenuItemAttributes.SandwichBeefSingle; i <= MenuItemAttributes.SandwichBlackBean; i++)
@@ -179,13 +272,35 @@ namespace RJOPointOfSale
             }
 
             m_entreeView.DecomposeAttributesToString();
-        }
+        }/*private void BtnNoMeat_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// Closes the attribute modification form.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnModify_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggers this event - the modify button.</param>
+        /// <param name="e">The EventArgs associated with the event.</param>
         private void BtnModify_Click(object sender, EventArgs e)
         {
             Close();
-        }
+        }/*private void BtnModify_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// This method handles the initial logic for modifying an 
+        /// attribute of an entree. Perform a different action depending
+        /// on the m_extraLightOnSide flag.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnToppings_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered this event - any of the toppings buttons.</param>
+        /// <param name="e">The EventArgs associated with this event.</param>
         private void BtnToppings_Click(object sender, EventArgs e)
         {
             Button selection = sender as Button;
@@ -210,8 +325,19 @@ namespace RJOPointOfSale
             }
 
             m_entreeView.DecomposeAttributesToString();
-        }
+        }/*private void BtnToppings_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// The click event for signafying that the customer would like no bun with their order.
+        /// This method clears all bun-related attributes from the attributes array.
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnNoBun_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered the event - the NO BUN button.</param>
+        /// <param name="e">The EventARgs associated with this event.</param>
         private void BtnNoBun_Click(object sender, EventArgs e)
         {
             for (int i = MenuItemAttributes.SandwichEggBun; i <= MenuItemAttributes.SandwichGlutenFreeBun; i++)
@@ -221,8 +347,21 @@ namespace RJOPointOfSale
             }
 
             m_entreeView.DecomposeAttributesToString();
-        }
+        }/*private void BtnNoBun_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// This method handles the modification of a physical attribute.
+        /// Behavior is different for if an entree originally had an attibute vs
+        /// if the entree didn't originally have an attribute. Handles both
+        /// the selection and deselection of an attribute.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ModifyAttribute
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="a_tag">The tag of the button which this integer came from, which is
+        /// also the index of the attribute array.</param>
         private void ModifyAttribute(int a_tag)
         {
             //If attribute is selected && was part of original signature
@@ -249,8 +388,21 @@ namespace RJOPointOfSale
                 m_attributes[a_tag] = m_hasAttributeFlag;
                 m_buttonAttributes[a_tag - 1].BackgroundImage = Resources.green_check_icon_png_4;
             }
-        }
+        }/*private void ModifyAttribute(int a_tag)*/
 
+        /// <summary>
+        /// This method handles the setup of the modification of a physical attribute with the Extra,
+        /// Light or On Side modifications. Behavior is different depending on whether or not 
+        /// an entree originally had an attribute or not. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: ModifyAttributeExtraLightOnSide
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="a_tag">The tag of the button which this integer came from, which is
+        /// also the index of the attribute array.</param>
+        /// <param name="a_typeOfModification">The type of modification: Extra, Light or On Side.</param>
         private void ModifyAttributeExtraLightOnSide(int a_tag, int a_typeOfModification)
         {
             //If attribute is selected && was part of original signature
@@ -279,8 +431,19 @@ namespace RJOPointOfSale
 
             m_extraLightOnSide.Checked = false;
             m_extraLightOnSide = null;
-        }
+        }/*private void ModifyAttributeExtraLightOnSide(int a_tag, int a_typeOfModification)*/
 
+        /// <summary>
+        /// This method exists to reflect the selection of Extra, Light or On Side 
+        /// modification.
+        /// </summary>
+        /// <remarks>
+        /// NAME: RadioButtonSelection_CheckedChanged
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The buttton that triggered this event - the Extra, Light or On Side buttons.</param>
+        /// <param name="e"></param>
         private void RadioButtonSelection_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton selection = sender as RadioButton;
@@ -289,8 +452,20 @@ namespace RJOPointOfSale
             {
                 m_extraLightOnSide = selection;
             }
-        }
+        }/*private void RadioButtonSelection_CheckedChanged(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// This method is called from the ModifyAttributeExtraLightOnSide method. This method performs the
+        /// physical modification of an attribute. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: ModifyButtonsForExtraLightOnSide
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="a_attributesIndex">The index of the attribute to be modified.</param>
+        /// <param name="a_typeOfMod">The integer representation of Extra, Light or On Side. 2 = Extra, 
+        /// 3 = Light, 4 = On Side.</param>
         private void ModifyButtonsForExtraLightOnSide(int a_attributesIndex, int a_typeOfMod)
         {
             switch (a_typeOfMod)
@@ -308,15 +483,24 @@ namespace RJOPointOfSale
                     m_buttonAttributes[a_attributesIndex - 1].BackgroundImage = Resources.OnSideAttributes;
                     break;
             }
-        }
+        }/*private void ModifyButtonsForExtraLightOnSide(int a_attributesIndex, int a_typeOfMod)*/
 
+        /// <summary>
+        /// This method formats the font of the text in the display. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: lbModifiedEntree_DrawItem
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The object that triggered this event - the ListBox.</param>
+        /// <param name="e">The DrawItemEventArgs associated with this event.</param>
         private void lbModifiedEntree_DrawItem(object sender, DrawItemEventArgs e)
         {
-            //INTERESTING..........COULD POSSIBLY COLOR ITEMS SENT TO THE KITCHEN A DIFFERENT COLOR IN THE FUTURE
             e.DrawBackground();
             e.Graphics.DrawString(lbModifiedEntree.Items[e.Index].ToString(), new Font("Arial", 10, FontStyle.Bold), Brushes.Black, e.Bounds);
             e.DrawFocusRectangle();
-        }
+        }/*private void lbModifiedEntree_DrawItem(object sender, DrawItemEventArgs e)*/
 
     }
 }
