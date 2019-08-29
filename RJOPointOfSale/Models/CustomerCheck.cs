@@ -14,7 +14,7 @@ namespace RJOPointOfSale
         private readonly List<Meal> m_customerOrders = new List<Meal>();
         private readonly List<List<int>> m_mealMatrix = new List<List<int>>();
         private const int m_itemMissingInMeal = -1;
-
+        public string Name { get; set; }
         /// <summary>
         /// The default constructor for the CustomerCheck object. Generates a unique
         /// GUID for itself.
@@ -30,8 +30,7 @@ namespace RJOPointOfSale
             m_checkID = checkGUID.ToString();
             Name = m_checkID.Substring(0, 4);
         }/*public CustomerCheck()*/
-        public string Name { get; set; }
-
+        
         /// <summary>
         /// Adds a meal to the list that represents the customer's orders
         /// </summary>
@@ -79,6 +78,10 @@ namespace RJOPointOfSale
             return m_customerOrders.ElementAt(a_index);
         }/*public Meal GetMealAtIndex(int a_index)*/
 
+        public string GetCheckGUID()
+        {
+            return m_checkID;
+        }
         /// <summary>
         /// Deletes a meal at an index
         /// </summary>

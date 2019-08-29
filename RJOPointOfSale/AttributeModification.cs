@@ -93,7 +93,7 @@ namespace RJOPointOfSale
         /// </remarks>
         private void CompleteButtonDisplay()
         {
-            for (int i = 1; i < m_buttonAttributes.Count - m_excludeProteinOptions; i++)
+            for (int i = 1; i <= m_buttonAttributes.Count - m_excludeProteinOptions; i++)
             {
                 if (m_attributes[i] != m_emptyAttribute)
                 {
@@ -171,7 +171,7 @@ namespace RJOPointOfSale
         /// to a double to make a triple is an entirely separate set of logic when adding a single
         /// patty to a single sandwich
         /// </remarks>
-        /// <param name="sender">The button that triggered the event - any of the protein addtion buttons.</param>
+        /// <param name="sender">The button that triggered the event - any of the protein addition buttons.</param>
         /// <param name="e">The EventArgs associated with the event.</param>
         private void BtnAddProtein_Click(object sender, EventArgs e)
         {
@@ -227,7 +227,7 @@ namespace RJOPointOfSale
                                   m_attributes[MenuItemAttributes.SandwichBlackBean] +
                                   m_attributes[MenuItemAttributes.SandwichBeefDouble];
 
-            if (returnThreshold == 1)
+            if (returnThreshold == 1 && !m_entreeToBeModified.EntreeIdentifier.Contains("Salad"))
             {
                 MessageBox.Show(@"If the customer wants NO MEAT on their sandwich, click the NO MEAT button");
                 return;

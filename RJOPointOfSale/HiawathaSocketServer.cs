@@ -183,7 +183,7 @@ namespace HiawathaSocketAsync
         }/*RemoveClient(TcpClient paramClient)*/
 
         /// <summary>
-        /// An asynchonous method to send any data to all connected clients.
+        /// An asynchronous method to send any data to all connected clients.
         /// </summary>
         /// <remarks>
         /// NAME: SendToAll
@@ -212,5 +212,21 @@ namespace HiawathaSocketAsync
                 Debug.WriteLine(ex.ToString());
             }
         }/*SendToAll(string leMessage)*/
+
+        /// <summary>
+        /// A boolean method to determine if the TCPListener has any clients for it to send to.
+        /// </summary>
+        /// <remarks>
+        /// NAME: NoClients
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <returns>
+        /// Returns true if there are no clients, false otherwise.
+        /// </returns>
+        public bool NoClients()
+        {
+            return mClients.Count == 0;
+        }
     }
 }

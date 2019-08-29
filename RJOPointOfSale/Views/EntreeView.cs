@@ -100,7 +100,7 @@ namespace RJOPointOfSale
         }/*void TextAttributes_ListChanged(object sender, ListChangedEventArgs e)*/
 
         /// <summary>
-        /// This method helps in handling the many different protein addtion scenerios for beef sandwiches, 
+        /// This method helps in handling the many different protein addition scenarios for beef sandwiches, 
         /// like if the item includes or excludes a protein type originally or if the sandwich is a 
         /// beef double (because it has it's own index in the attribute array.)
         /// </summary>
@@ -136,7 +136,7 @@ namespace RJOPointOfSale
         }/*private void StartAddingTextAttributeProteinAdditionsToViewForBeef(int[] a_attrs, string a_id)*/
 
         /// <summary>
-        /// This method helps in handling the many different protein addtion scenerios for Grilled chicken sandwiches, 
+        /// This method helps in handling the many different protein addition scenarios for Grilled chicken sandwiches, 
         /// like if the item includes or excludes a protein type originally or if the sandwich is a 
         /// beef double (because it has it's own index in the attribute array.)
         /// </summary>
@@ -168,7 +168,7 @@ namespace RJOPointOfSale
         }/*private void StartAddingTextAttributeProteinAdditionsToViewForGrilled(int[] a_attrs, string a_id)*/
 
         /// <summary>
-        /// This method helps in handling the many different protein addtion scenerios for Crispy sandwiches, 
+        /// This method helps in handling the many different protein addition scenarios for Crispy sandwiches, 
         /// like if the item includes or excludes a protein type originally or if the sandwich is a 
         /// beef double (because it has it's own index in the attribute array.)
         /// </summary>
@@ -200,7 +200,7 @@ namespace RJOPointOfSale
         }/*private void StartAddingTextAttributeProteinAdditionsToViewForCrispy(int[] a_attrs, string a_id)*/
 
         /// <summary>
-        /// This method helps in handling the many different protein addtion scenerios for Black Bean sandwiches, 
+        /// This method helps in handling the many different protein addition scenarios for Black Bean sandwiches, 
         /// like if the item includes or excludes a protein type originally or if the sandwich is a 
         /// beef double (because it has it's own index in the attribute array.)
         /// </summary>
@@ -284,7 +284,7 @@ namespace RJOPointOfSale
         private void AddTextAttributeModificationsToView(int[] a_attrs, int[] a_origAttrs)
         {
 
-            for (int i = 1; i < MenuItemAttributes.SandwichFriedEgg; i++)
+            for (int i = 1; i <= MenuItemAttributes.SandwichFriedEgg; i++)
             {
                 if (a_attrs[i] == 0 && a_origAttrs[i] == 1)
                 {

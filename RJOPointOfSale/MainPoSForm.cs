@@ -1,14 +1,13 @@
-﻿using System;
+﻿using HiawathaSocketAsync;
+using RJOPointOfSale.Properties;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using RJOPointOfSale.Properties;
-using HiawathaSocketAsync;
 
 namespace RJOPointOfSale
 {
@@ -54,7 +53,7 @@ namespace RJOPointOfSale
         public MainPoSForm()
         {
             InitializeComponent();
-        }
+        }/*public MainPoSForm()*/
 
         /// <summary>
         /// A constructor for the main register menu that retrieves the employee code from the passcode form.
@@ -68,7 +67,7 @@ namespace RJOPointOfSale
         public MainPoSForm(int a_enteredCode) : this()
         {
             m_employeeCode = a_enteredCode;
-        }
+        }/*public MainPoSForm(int a_enteredCode) : this()*/
 
         /// <summary>
         /// The Load event for the main register menu. This event is raised whenever the form is constructed
@@ -81,7 +80,7 @@ namespace RJOPointOfSale
         /// DATE: 8/13/2019
         /// </remarks>
         /// <param name="sender"> The object that the event is attached to </param>
-        /// <param name="e"> The EventArgs of the rasied event. </param>
+        /// <param name="e"> The EventArgs of the raised event. </param>
         private void MainPoSForm_Load(object sender, EventArgs e)
         {
             Button defaultTabButton = new Button
@@ -106,8 +105,7 @@ namespace RJOPointOfSale
             RecognizeEmployeeTitle();
 
             lbCustomerCheck.DataSource = m_customerCheckView.GetItemsForDisplay();
-
-        }
+        }/*private void MainPoSForm_Load(object sender, EventArgs e)*/
 
         /// <summary>
         /// This click event is raised whenever the user wants to create a new customer tab.
@@ -150,7 +148,7 @@ namespace RJOPointOfSale
                 MessageBox.Show(@"Maximum tab capacity reached.");
             }
 
-        }
+        }/*private void BtnNewTab_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// A click event that is raised whenever the user clicks tab.
@@ -170,7 +168,7 @@ namespace RJOPointOfSale
             m_currentlySelectedTab = (int)currentButton.Tag;
             m_customerCheckView.ClearMembersForReinitialization();
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
-        }
+        }/*private void BtnTabInfo_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// The event raised whenever the user instructs the PoS to close a tab. 
@@ -200,7 +198,7 @@ namespace RJOPointOfSale
             }
 
             RedefineButtonTags();
-        }
+        }/*private void BtnCloseTab_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// Iterates through the list of currently open tabs and redefine's their tags.
@@ -221,7 +219,7 @@ namespace RJOPointOfSale
                 tagRedefinition++;
             }
             m_buttonID = tagRedefinition;
-        }
+        }/*private void RedefineButtonTags()*/
 
         /// <summary>
         /// Queries the database for the employees information
@@ -237,7 +235,6 @@ namespace RJOPointOfSale
         {
             try
             {
-                //string sql_statement = @"SELECT ""firstName"" FROM public.""tbl_employees"" WHERE ""employeeCode"" = :enteredCode";
                 string sql_statement = @"SELECT firstName FROM public.tbl_employees WHERE employeeCode = :enteredCode";
                 m_conn.Query = sql_statement;
                 m_conn.SetLogin = m_employeeCode;
@@ -257,7 +254,7 @@ namespace RJOPointOfSale
                 MessageBox.Show(ex.Message);
             }
 
-        }
+        }/*private void RecognizeEmployee()*/
 
         /// <summary>
         /// Queries database to for employee information
@@ -273,7 +270,6 @@ namespace RJOPointOfSale
         {
             try
             {
-                //string sql_statement = @"SELECT ""tbl_jobCodes"".""roleName"" FROM public.""tbl_jobCodes"" JOIN ""tbl_employees"" ON ""tbl_employees"".""jobCode"" = ""tbl_jobCodes"".""code"" WHERE ""employeeCode"" = :enteredCode";
                 string sql_statement = @"SELECT tbl_jobCodes.roleName FROM public.tbl_jobCodes JOIN tbl_employees ON tbl_employees.jobCode = tbl_jobCodes.code WHERE employeeCode = :enteredCode";
                 m_conn.Query = sql_statement;
                 m_conn.SetLogin = m_employeeCode;
@@ -293,7 +289,7 @@ namespace RJOPointOfSale
                 MessageBox.Show(ex.Message);
             }
 
-        }
+        }/*private void RecognizeEmployeeTitle()*/
 
         /// <summary>
         /// Establishes the connection with the database.
@@ -314,7 +310,7 @@ namespace RJOPointOfSale
             {
                 MessageBox.Show(e.Message);
             }
-        }
+        }/*private void InitializeDatabaseConnection()*/
 
         /// <summary>
         /// This event is raised whenever the user wants to add a check identifier to the tab.
@@ -336,11 +332,11 @@ namespace RJOPointOfSale
             KeyboardForm keyboardForm = new KeyboardForm(checkAtSelectedTab);
             keyboardForm.ShowDialog();
             selectedTab.Text = checkAtSelectedTab.Name;
-        }
+        }/*private void BtnSetCheckName_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This event is raised whenever the user chooses a signature sandwich.
-        /// The radio button is saved for when the customer chooses a protien option
+        /// The radio button is saved for when the customer chooses a protein option
         /// </summary>
         /// <remarks>
         /// NAME: RadioButtonSelection_CheckedChanged
@@ -357,10 +353,10 @@ namespace RJOPointOfSale
             {
                 m_selectedSignature = selection;
             }
-        }
+        }/*private void RadioButtonSelection_CheckedChanged(object sender, EventArgs e)*/
 
         /// <summary>
-        /// This event is raised whenever the user selects a protien option. If a signature hasn't 
+        /// This event is raised whenever the user selects a protein option. If a signature hasn't 
         /// been selected yet, return. Otherwise, create the desired Entree object by retrieving 
         /// the sandwiches attributes from the database.
         /// </summary>
@@ -405,7 +401,34 @@ namespace RJOPointOfSale
             m_selectedSignature.Checked = false;
             m_selectedSignature = null;
             UpdateDisplay();
-        }
+        }/*private void BtnSignatureAndProteinSelection_Click(object sender, EventArgs e)*/
+
+
+        /// <summary>
+        /// This click event is triggered whenever the user selects one of the salad buttons. A new Entree is
+        /// created which queries the database for the salad attributes, which is then
+        /// passed into the attribute modification form. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: BtnSaladSelection_Click
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="sender">The button that triggered this event - the salad buttons</param>
+        /// <param name="e">The EventArgs associated with this event.</param>
+        private void BtnSaladSelection_Click(object sender, EventArgs e)
+        {
+            Button selectedSalad = sender as Button;
+            Entree signature = new Entree();
+
+            signature.RetrieveAttributesFromDb((string)selectedSalad.Tag);
+
+            AttributeModification atModForm = new AttributeModification(signature);
+            atModForm.ShowDialog();
+
+            m_customerChecks[m_currentlySelectedTab].CreateNewMealOrAddEntreeToMeal(signature);
+            UpdateDisplay();
+        }/*BtnSaladSelection_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This event is raised when any of the Kids Meal options are selected. 
@@ -433,8 +456,7 @@ namespace RJOPointOfSale
 
             m_customerChecks[m_currentlySelectedTab].AddMealToCheck(kidsMeal);
             UpdateDisplay();
-
-        }
+        }/*private void BtnKidsMeals_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This event is raised whenever the user selects a side. The database is queried for that 
@@ -457,7 +479,7 @@ namespace RJOPointOfSale
             m_customerChecks[m_currentlySelectedTab].CreateNewMealOrAddSideToMeal(side);
 
             UpdateDisplay();
-        }
+        }/*private void BtnSideSelection_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This event is raised whenever the user selects any of the beverage buttons.
@@ -480,7 +502,7 @@ namespace RJOPointOfSale
             m_customerChecks[m_currentlySelectedTab].CreateNewMealOrAddBeverageToMeal(beverage);
 
             UpdateDisplay();
-        }
+        }/*private void BtnBeverageSelection_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// Updates the view of the Listbox that represents the check's order information.
@@ -493,7 +515,7 @@ namespace RJOPointOfSale
         private void UpdateDisplay()
         {
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
-        }
+        }/*private void UpdateDisplay()*/
 
         /// <summary>
         /// 
@@ -509,7 +531,7 @@ namespace RJOPointOfSale
         {
             //string toBeFormatted = e.ListItem.ToString();
             //string[] values = toBeFormatted.Split('\n');
-        }
+        }/*private void LbCustomerCheck_Format(object sender, ListControlConvertEventArgs e)*/
 
         /// <summary>
         /// Handles the logic for when the user selects an item in the check for modification.
@@ -525,30 +547,68 @@ namespace RJOPointOfSale
         /// <param name="e">The EventArgs of the event</param>
         private void BtnModify_Click(object sender, EventArgs e)
         {
+            if (m_customerChecks[m_currentlySelectedTab].NumberOfMeals() == 0)
+            {
+                MessageBox.Show(@"No items to modify");
+                return;
+            }
+
             Tuple<int, int> mealTuple = GetDisplaySelection();
             bool determineIfKidsMeal = DetermineIfKidsMeal(mealTuple.Item1);
-            Entree toBeModified = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(mealTuple.Item1).GetEntree();
+
             if (mealTuple.Item2 != 0)
             {
-                MessageBox.Show(@"You can only modify entrees");
+                MessageBox.Show(@"You can only modify entrees or kids meals.");
                 return;
             }
 
             if (determineIfKidsMeal)
             {
-                KidsMeal chosenKidsMeal = (KidsMeal)m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(mealTuple.Item1);
-                KidsMealModification kmm = new KidsMealModification(chosenKidsMeal);
-                kmm.ShowDialog();
-                UpdateDisplay();
+                ModifyKidsMeal(mealTuple.Item1);
             }
             else
             {
-                AttributeModification modifySelection = new AttributeModification(toBeModified);
-                modifySelection.ShowDialog();
-                UpdateDisplay();
+                Entree toBeModified = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(mealTuple.Item1).GetEntree();
+                ModifyMeal(toBeModified);
             }
 
-        }
+        }/*private void BtnModify_Click(object sender, EventArgs e)*/
+
+        /// <summary>
+        /// This method modifies the KidMeal at the given index, where the index
+        /// is the position the meal is in in the meal list.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ModifyKidsMeal
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The index of the meal to be modified</param>
+        private void ModifyKidsMeal(int a_mealIndex)
+        {
+            KidsMeal chosenKidsMeal = (KidsMeal)m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex);
+            KidsMealModification kmm = new KidsMealModification(chosenKidsMeal);
+            kmm.ShowDialog();
+            UpdateDisplay();
+        }/*private void ModifyKidsMeal(int a_mealIndex)*/
+
+
+        /// <summary>
+        /// Modifies the meal passed into this method via the AttributeModification form.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ModifyMeal
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_toBeModified">The Entree to be modified.</param>
+        private void ModifyMeal(Entree a_toBeModified)
+        {
+            AttributeModification modifySelection = new AttributeModification(a_toBeModified);
+            modifySelection.ShowDialog();
+            UpdateDisplay();
+        }/*private void ModifyMeal(Entree a_toBeModified)*/
+
 
         /// <summary>
         /// Handles the initial logic for deleting an item from the customer's check. If the user selected a 
@@ -563,16 +623,38 @@ namespace RJOPointOfSale
         /// <param name="e">The EventArgs of the event.</param>
         private void BtnDeleteItem_Click(object sender, EventArgs e)
         {
+            if (ValidateDeleteAction()) { return;}
+
             Tuple<int, int> mealTuple = GetDisplaySelection();
             bool voidOrDelete = DetermineIfVoidOrDelete(mealTuple.Item1);
+            bool isKidsMeal = DetermineIfKidsMeal(mealTuple.Item1);
 
-            if (voidOrDelete)
+            if (voidOrDelete && !isKidsMeal)
             {
-                //void
-                //1) Get selected item
-                //2) Parse into string attributes
-                //3) listOfItems.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
-                //4) Add a VOID command at the front of the attributes.
+                switch (mealTuple.Item2)
+                {
+                    case m_removeEntree:
+                        SendVoidCommandForEntree(mealTuple.Item1);
+                        DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
+                        break;
+                    case m_removeSide:
+                        SendVoidCommandForSide(mealTuple.Item1);
+                        DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
+                        break;
+                    case m_removeBeverage:
+                        SendVoidCommandForBeverage(mealTuple.Item1);
+                        DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
+                        break;
+                }
+            }
+            else if (voidOrDelete && isKidsMeal)
+            {
+                SendVoidCommandForKidsMeal(mealTuple.Item1);
+                DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
+            }
+            else if (!voidOrDelete && isKidsMeal)
+            {
+                DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
             }
             else
             {
@@ -582,27 +664,140 @@ namespace RJOPointOfSale
             m_customerChecks[m_currentlySelectedTab].ClearEmptyMeals();
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
 
+        }/*private void BtnDeleteItem_Click(object sender, EventArgs e)*/
+
+        private bool ValidateDeleteAction()
+        {
+            if (m_customerChecks[m_currentlySelectedTab].NumberOfMeals() == 0)
+            {
+                MessageBox.Show(@"No items to delete");
+                return true;
+            }
+
+            return false;
         }
 
+        /// <summary>
+        /// Determines if the current delete action is a void or standard delete. A void is
+        /// performed when the user wants to delete an item that has already been sent to
+        /// the KitchenScreenClient. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: DetermineIfVoidOrDelete
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The position of the meal within the meal list.</param>
+        /// <returns>
+        /// Returns true if the action is a void, false if standard delete.
+        /// </returns>
         private bool DetermineIfVoidOrDelete(int a_mealIndex)
         {
             CustomerCheck currentlySelectedCheck = m_customerChecks.ElementAt(m_currentlySelectedTab);
             Meal currentlySelectedMeal = currentlySelectedCheck.GetMealAtIndex(a_mealIndex);
             return currentlySelectedMeal.SentFlag;
-        }
+        }/*private bool DetermineIfVoidOrDelete(int a_mealIndex)*/
 
+
+        /// <summary>
+        /// This method decides whether or not to delete an entire meal, in the case of
+        /// kids meals, or just delete an item.
+        /// </summary>
+        /// <remarks>
+        /// NAME: DeleteItemOnTill
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The position of the meal in the meal list.</param>
+        /// <param name="a_itemIndex">The 'position' in the item in the meal: 0 = Entree, 1 = Side, 2 = Beverage.</param>
         private void DeleteItemOnTill(int a_mealIndex, int a_itemIndex)
         {
             bool determineIfKidsMeal = DetermineIfKidsMeal(a_mealIndex);
 
             if (determineIfKidsMeal)
             {
-                DeleteKidsMealAtIndex(a_mealIndex);
+                DeleteMealAtIndex(a_mealIndex);
             }
             else
             {
                 DeleteItemWithinMealAtIndex(a_mealIndex, a_itemIndex);
             }
+        }/*private void DeleteItemOnTill(int a_mealIndex, int a_itemIndex)*/
+
+        private void SendVoidCommandForEntree(int a_mealIndex)
+        {
+            Entree targetEntree = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).GetEntree();
+            EntreeView targetEntreeView = new EntreeView(targetEntree);
+
+            targetEntreeView.DecomposeAttributesToString();
+            List<string> attributesOfVoid = new List<string>();
+            foreach (string s in targetEntreeView.GetTextMods())
+            {
+                if (!s.Equals("") && !s.Equals("\r") && !s.Equals("~"))
+                {
+                    attributesOfVoid.Add(s +  '\n');
+                }
+            }
+
+            attributesOfVoid.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
+            attributesOfVoid.Insert(1, m_customerChecks[m_currentlySelectedTab].GetCheckGUID() + '\n');
+            attributesOfVoid.Insert(2, "VOID" + '\n');
+            string toBeSent = string.Join(string.Empty, attributesOfVoid);
+            m_server.SendToAll(toBeSent);
+            UpdateDisplay();
+        }
+
+        private void SendVoidCommandForSide(int a_mealIndex)
+        {
+            Side targetSide = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).GetSide();
+            SideView targetSideView = new SideView(targetSide);
+
+            List<string> attributesOfVoid = new List<string> {targetSideView.GetFormattedDetailsForDisplay()};
+
+            attributesOfVoid.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
+            attributesOfVoid.Insert(1, m_customerChecks[m_currentlySelectedTab].GetCheckGUID() + '\n');
+            attributesOfVoid.Insert(2, "VOID" + '\n');
+            string toBeSent = string.Join(string.Empty, attributesOfVoid);
+            m_server.SendToAll(toBeSent);
+            UpdateDisplay();
+        }
+
+        private void SendVoidCommandForBeverage(int a_mealIndex)
+        {
+            Beverage targetBeverage = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).GetBeverage();
+            BeverageView targetSideView = new BeverageView(targetBeverage);
+
+            List<string> attributesOfVoid = new List<string> {targetSideView.GetFormattedDetailsForDisplay()};
+
+            attributesOfVoid.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
+            attributesOfVoid.Insert(1, m_customerChecks[m_currentlySelectedTab].GetCheckGUID() + '\n');
+            attributesOfVoid.Insert(2, "VOID" + '\n');
+            string toBeSent = string.Join(string.Empty, attributesOfVoid);
+            m_server.SendToAll(toBeSent);
+            UpdateDisplay();
+        }
+
+        private void SendVoidCommandForKidsMeal(int a_mealIndex)
+        {
+            Meal targetMeal = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex);
+            MealView targetMealView = new MealView(targetMeal);
+
+            targetMealView.FillMealDisplay();
+            List<string> attributesOfVoid = new List<string>();
+            foreach (string s in targetMealView.GetDisplay())
+            {
+                if (!s.Equals("") && !s.Equals("\r") && !s.Equals("~"))
+                {
+                    attributesOfVoid.Add(s + '\n');
+                }
+            }
+
+            attributesOfVoid.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
+            attributesOfVoid.Insert(1, m_customerChecks[m_currentlySelectedTab].GetCheckGUID() + '\n');
+            attributesOfVoid.Insert(2, "VOID" + '\n');
+            string toBeSent = string.Join(string.Empty, attributesOfVoid);
+            m_server.SendToAll(toBeSent);
+            UpdateDisplay();
         }
 
         /// <summary>
@@ -614,10 +809,10 @@ namespace RJOPointOfSale
         /// DATE: 8/13/2019
         /// </remarks>
         /// <param name="a_index">The index of the meal to be deleted</param>
-        private void DeleteKidsMealAtIndex(int a_index)
+        private void DeleteMealAtIndex(int a_index)
         {
             m_customerChecks[m_currentlySelectedTab].DeleteMealAtIndex(a_index);
-        }
+        }/*private void DeleteKidsMealAtIndex(int a_index)*/
 
         /// <summary>
         /// A utility method that determines if a meal at an index is a KidsMeal.
@@ -636,7 +831,7 @@ namespace RJOPointOfSale
         {
             Meal toBeDetermined = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_targetMeal);
             return toBeDetermined.IsKidsMeal();
-        }
+        }/*private bool DetermineIfKidsMeal(int a_targetMeal)*/
 
         /// <summary>
         /// Retrieves the relevant indices of the item selected in the view.
@@ -657,7 +852,7 @@ namespace RJOPointOfSale
             Tuple<int, int> mealTuple = m_customerChecks[m_currentlySelectedTab].FindMealViaMatrix(indexOfMeal);
 
             return mealTuple;
-        }
+        }/*private Tuple<int, int> GetDisplaySelection()*/
 
         /// <summary>
         /// Deletes a target item from the customer's check. The tuple contains the position 
@@ -685,7 +880,7 @@ namespace RJOPointOfSale
                     m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).RemoveBeverage();
                     break;
             }
-        }
+        }/*private void DeleteItemWithinMealAtIndex(int a_mealIndex, int a_itemIndex)*/
 
         //TODO: Clear Button
         /// <summary>
@@ -700,7 +895,7 @@ namespace RJOPointOfSale
         private void BtnClear_Click(object sender, EventArgs e)
         {
             //TODO: Simply clearing the check is easy, IF no orders have been sent to screen. Will come back to this later. 
-        }
+        }/*private void BtnClear_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This method is called whenever the customer's orders are drawn to the screen. Handles logic
@@ -716,9 +911,14 @@ namespace RJOPointOfSale
         private void LbCustomerCheck_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
+            //For when the user clicks on the empty Listbox.
+            if (e.Index < 0) { return; }
+
             string formattable = lbCustomerCheck.Items[e.Index].ToString();
 
-            if (e.Index < m_numOfSentLines)
+            CustomerCheckView viewTextFormatting = new CustomerCheckView(m_customerChecks[m_currentlySelectedTab]);
+
+            if (e.Index < viewTextFormatting.GetCountInDisplayOfSentItems())
             {
                 e.Graphics.DrawString(formattable, new Font("Arial", 10, FontStyle.Italic), Brushes.Black, e.Bounds);
                 e.DrawFocusRectangle();
@@ -729,7 +929,7 @@ namespace RJOPointOfSale
                 e.DrawFocusRectangle();
             }
 
-        }
+        }/*private void LbCustomerCheck_DrawItem(object sender, DrawItemEventArgs e)*/
 
         /// <summary>
         /// This click event is fired when the user clicks the beverage selection form.
@@ -751,7 +951,7 @@ namespace RJOPointOfSale
 
             m_customerChecks[m_currentlySelectedTab].CreateNewMealOrAddBeverageToMeal(bevFromSelectionForm);
             UpdateDisplay();
-        }
+        }/*private void BtnBeverages_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This event is a visibility event for the main form. This is primarily used to 
@@ -771,7 +971,7 @@ namespace RJOPointOfSale
             {
                 LaunchSisterApplication();
             }
-        }
+        }/*private void MainPoSForm_VisibleChanged(object sender, EventArgs e)*/
 
         /// <summary>
         /// The goal of this method is to have a system-independent way to get the
@@ -793,7 +993,7 @@ namespace RJOPointOfSale
             string relativePath = partialPath + @"\RJOPointOfSale\KitchenScreenClient\bin\Debug\KitchenScreenClient.exe";
 
             return relativePath;
-        }
+        }/*private string ParseRelativePath()*/
 
         /// <summary>
         /// Uses the relative path from ParseRelativePath to run the KitchenScreensClient.
@@ -821,8 +1021,8 @@ namespace RJOPointOfSale
                 sister.Start();
                 m_sisterApplicationID = sister.Id;
             }
+        }/*private void LaunchSisterApplication()*/
 
-        }
         /// <summary>
         /// Fires when the user clicks the Exit button. Simulates exiting but actually Hide()s.
         /// This is to avoid the serialization of customer's orders.
@@ -837,10 +1037,10 @@ namespace RJOPointOfSale
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Hide();
-            KillSisterProcess();
-            m_sisterApplicationID = 0;
+            //KillSisterProcess();
+            //m_sisterApplicationID = 0;
             m_enterCodeForm.Show(this);
-        }
+        }/*private void BtnExit_Click(object sender, EventArgs e)*/
 
         /// <summary>
         /// This method Kills the KitchenScreenClient executable. Used primarily when
@@ -862,7 +1062,7 @@ namespace RJOPointOfSale
             {
                 Console.WriteLine(e);
             }
-        }
+        }/*private void KillSisterProcess()*/
 
         /// <summary>
         /// This click event handles the firing of the customer's orders to the 
@@ -880,24 +1080,28 @@ namespace RJOPointOfSale
             List<string> listOfItems = new List<string>();
             listOfItems = m_customerCheckView.GetUnsentItemsForSending();
             listOfItems.Insert(0, m_customerChecks[m_currentlySelectedTab].Name + '\n');
-            FlagMealsOnTillAsSent();
-
+            
             if (listOfItems.Count <= 1)
             {
+                MessageBox.Show(@"ERR: Empty Check. Please fill the till with items before sending.");
                 return;
             }
 
+            if (m_server.NoClients())
+            {
+                MessageBox.Show(@"ERR: No connection has been established with the server. " +
+                                @"Click/Tap the 'Establish Connection with PoS' button on the KitchenScreenClient.");
+                return;
+            }
+
+            listOfItems.Insert(1, m_customerChecks[m_currentlySelectedTab].GetCheckGUID() + '\n');
+            FlagMealsOnTillAsSent();
             string toBeSent = string.Join(string.Empty, listOfItems);
             m_server.SendToAll(toBeSent);
             m_numOfSentLines = m_customerCheckView.GetCountInDisplayOfSentItems();
             UpdateDisplay();
-        }
-
-        private void SendVoidCommandOfItemToClient()
-        {
-
-        }
-
+        }/*private void BtnSendOrdersOnTill_Click(object sender, EventArgs e)*/
+        
         /// <summary>
         /// Flag all the items on the current tab as sent.
         /// </summary>
@@ -914,6 +1118,6 @@ namespace RJOPointOfSale
                 Meal mealOnTill = currentlySelected.GetMealAtIndex(i);
                 mealOnTill.SentFlag = true;
             }
-        }
+        }/*private void FlagMealsOnTillAsSent()*/
     }
 }

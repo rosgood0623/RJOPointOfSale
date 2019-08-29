@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +49,9 @@
   <ItemGroup>
     <Compile Include="HiawathaSocketClient.cs" />
     <Compile Include="OnScreenOrder.cs" />
+    <Compile Include="OnScreenOrderControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Screen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RJOPointOfSale\RJOPointOfSale.csproj">
+      <Project>{9E488DEC-F977-41CB-952E-814DCC8A2E2D}</Project>
+      <Name>RJOPointOfSale</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

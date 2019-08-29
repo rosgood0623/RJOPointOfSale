@@ -41,7 +41,7 @@ namespace RJOPointOfSale
 
         /// <summary>
         /// A constructor for the KidsMealModification. Inherits from the default constructor.
-        /// Passes in a KidsMeal and intializes the members that are vital 
+        /// Passes in a KidsMeal and initializes the members that are vital 
         /// to the ability to modify the meal.
         /// </summary>
         /// <remarks>

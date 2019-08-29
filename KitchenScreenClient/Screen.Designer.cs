@@ -203,6 +203,9 @@
             this.Controls.Add(this.btnFirst);
             this.Controls.Add(this.btnBump);
             this.Controls.Add(this.flpScreenFlow);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Screen";
             this.Text = "Kitchen Screen";
             this.ResumeLayout(false);

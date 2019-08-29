@@ -22,6 +22,7 @@ namespace KitchenScreenClient
         private readonly ScreenView m_screenManager;
         private int m_cursorSelectionPostion = 0;
 
+        private const string m_voidCommand = "VOID";
         /// <summary>
         /// The default constructor for the Screen object. 
         /// Inits the components and it's members.
@@ -56,6 +57,7 @@ namespace KitchenScreenClient
             int position = (int)positionToBump.Tag;
             flpScreenFlow.Controls.RemoveAt(position);
             m_customerOrders.RemoveAt(position);
+            UpdateScreenView();
         }/*private void Btn_BumpViaNumbers(object sender, EventArgs e)*/
 
         /// <summary>
@@ -74,6 +76,8 @@ namespace KitchenScreenClient
         private void Btn_BumpViaBump(object sender, EventArgs e)
         {
             flpScreenFlow.Controls.RemoveAt(m_cursorSelectionPostion);
+            m_customerOrders.RemoveAt(m_cursorSelectionPostion);
+            UpdateScreenView();
         }/*private void Btn_BumpViaBump(object sender, EventArgs e)*/
 
         /// <summary>
@@ -105,7 +109,7 @@ namespace KitchenScreenClient
 
         /// <summary>
         /// This displays on-screen confirmation that the KitchenScreens and the MainPoSMenu 
-        /// have successfully or unsuccessfully connected to eachother. 
+        /// have successfully or unsuccessfully connected to each other. 
         /// </summary>
         /// <remarks>
         /// NAME: ConfirmConnectionSuccession
@@ -114,6 +118,7 @@ namespace KitchenScreenClient
         /// </remarks>
         private void ConfirmConnectionSuccession()
         {
+            lbConnectionEstablished.Text = string.Empty;
             lbConnectionEstablished.Text = m_client.IsConnected() ? @"Connection Established!" : @"Connection Failed to Establish....";
         }/*private void ConfirmConnectionSuccession()*/
 
@@ -134,11 +139,11 @@ namespace KitchenScreenClient
             {
                 if (i == m_screenManager.CursorPosition)
                 {
-                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Tan);
+                    m_screenManager.AddElementToScreenWithControls(m_customerOrders[i], Color.Tan);
                 }
                 else
                 {
-                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Empty);
+                    m_screenManager.AddElementToScreenWithControls(m_customerOrders[i], Color.Empty);
                 }
 
             }
@@ -155,11 +160,37 @@ namespace KitchenScreenClient
         /// <param name="a_message">The raw data from the server - the MainPoSMenu</param>
         public void ConvertDataFromPoSIntoScreenElement(string a_message)
         {
-            OnScreenOrder newOnScreenOrder = new OnScreenOrder();
-            newOnScreenOrder.ParseSentStringIntoOrder(a_message);
-            m_customerOrders.Add(newOnScreenOrder);
+            a_message = a_message.Trim('\0');
+            
+            if (a_message.Contains("VOID"))
+            {
+                SearchForVoidCandidate(a_message);
+            }
+            else
+            {
+                OnScreenOrder newOnScreenOrder = new OnScreenOrder();
+                newOnScreenOrder.ParseSentStringIntoOrder(a_message);
+                m_customerOrders.Add(newOnScreenOrder);
+            }
+
             UpdateScreenView();
+
         }/*public void ConvertDataFromPoSIntoScreenElement(string a_message)*/
+
+        private void SearchForVoidCandidate(string a_voidMessage)
+        {
+            a_voidMessage = a_voidMessage.Replace("VOID\n", string.Empty);
+            string[] parsed = a_voidMessage.Split('\n');
+
+            foreach (OnScreenOrder o in m_customerOrders)
+            {
+                if (o.CompareCheckGUID(parsed[1]) && o.DetermineIfVoidBelongs(parsed))
+                {
+                    o.AddVoidElements(a_voidMessage);
+                    return;
+                }
+            }
+        }
 
         /// <summary>
         /// This event is triggered when the user wishes to move the screen's 

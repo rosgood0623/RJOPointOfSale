@@ -696,8 +696,10 @@
             this.btnSaladBBQ.Name = "btnSaladBBQ";
             this.btnSaladBBQ.Size = new System.Drawing.Size(81, 66);
             this.btnSaladBBQ.TabIndex = 63;
+            this.btnSaladBBQ.Tag = "BBQSalad";
             this.btnSaladBBQ.Text = "BBQ Salad";
             this.btnSaladBBQ.UseVisualStyleBackColor = false;
+            this.btnSaladBBQ.Click += new System.EventHandler(this.BtnSaladSelection_Click);
             // 
             // btnSaladCobb
             // 
@@ -706,8 +708,10 @@
             this.btnSaladCobb.Name = "btnSaladCobb";
             this.btnSaladCobb.Size = new System.Drawing.Size(81, 66);
             this.btnSaladCobb.TabIndex = 64;
+            this.btnSaladCobb.Tag = "CobbSalad";
             this.btnSaladCobb.Text = "Cobb Salad";
             this.btnSaladCobb.UseVisualStyleBackColor = false;
+            this.btnSaladCobb.Click += new System.EventHandler(this.BtnSaladSelection_Click);
             // 
             // b30ozFountain
             // 
@@ -944,7 +948,7 @@
             this.Controls.Add(this.btnCloseTab);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnNewTab);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

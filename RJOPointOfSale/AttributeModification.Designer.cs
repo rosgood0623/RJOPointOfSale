@@ -77,8 +77,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.lbModifiedEntree = new System.Windows.Forms.ListBox();
             this.btnNoMeat = new System.Windows.Forms.Button();
+            this.lbModifiedEntree = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -808,17 +808,6 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.BtnSubProtein_Click);
             // 
-            // lbModifiedEntree
-            // 
-            this.lbModifiedEntree.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.lbModifiedEntree.FormattingEnabled = true;
-            this.lbModifiedEntree.ItemHeight = 15;
-            this.lbModifiedEntree.Location = new System.Drawing.Point(3, 60);
-            this.lbModifiedEntree.Name = "lbModifiedEntree";
-            this.lbModifiedEntree.Size = new System.Drawing.Size(285, 484);
-            this.lbModifiedEntree.TabIndex = 4;
-            this.lbModifiedEntree.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbModifiedEntree_DrawItem);
-            // 
             // btnNoMeat
             // 
             this.btnNoMeat.BackColor = System.Drawing.Color.Snow;
@@ -832,13 +821,28 @@
             this.btnNoMeat.UseVisualStyleBackColor = false;
             this.btnNoMeat.Click += new System.EventHandler(this.BtnNoMeat_Click);
             // 
+            // lbModifiedEntree
+            // 
+            this.lbModifiedEntree.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.lbModifiedEntree.FormattingEnabled = true;
+            this.lbModifiedEntree.ItemHeight = 15;
+            this.lbModifiedEntree.Location = new System.Drawing.Point(3, 60);
+            this.lbModifiedEntree.Name = "lbModifiedEntree";
+            this.lbModifiedEntree.Size = new System.Drawing.Size(285, 484);
+            this.lbModifiedEntree.TabIndex = 4;
+            this.lbModifiedEntree.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbModifiedEntree_DrawItem);
+            // 
             // AttributeModification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 592);
+            this.ControlBox = false;
             this.Controls.Add(this.lbModifiedEntree);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AttributeModification";
             this.Text = "Modify the Selected Item";
             this.panel1.ResumeLayout(false);

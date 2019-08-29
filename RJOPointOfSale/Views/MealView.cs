@@ -179,7 +179,7 @@ namespace RJOPointOfSale
         /// <summary>
         /// This method counts the number of items that will be displayed in the view.
         /// Primarily used for determining exactly how many elements of the display have been 
-        /// sent to the kitchen screens, and thusly which elements of the display to italisize. 
+        /// sent to the kitchen screens, and thusly which elements of the display to italicize. 
         /// </summary>
         /// <remarks>
         /// NAME: SetNumberOfDisplayItems

@@ -52,7 +52,7 @@ namespace RJOPointOfSale
         }/*public void RefreshMealViews()*/
 
         /// <summary>
-        /// Clears and reintializes all members for updating.
+        /// Clears and reinitializes all members for updating.
         /// </summary>
         /// <remarks>
         /// NAME: UpdateMembersForDisplay
@@ -87,7 +87,7 @@ namespace RJOPointOfSale
         }/*public void RetrieveItemDetails()*/
 
         /// <summary>
-        /// An accesror method for getting the full check's details for displaying.
+        /// An accessor method for getting the full check's details for displaying.
         /// </summary>
         /// <remarks>
         /// NAME: GetItemsForDisplay
@@ -168,6 +168,7 @@ namespace RJOPointOfSale
 
             return numberOfSentLines;
         }/*public int GetCountInDisplayOfSentItems()*/
+
 
         /// <summary>
         /// Display the new index of the item added.
@@ -275,11 +276,11 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/16/2019
         /// </remarks>
-        /// <param name="splitsForDisplay">The unparsed strings for display for an item.</param>
-        private void SaveNumberOfDisplayLinesOnEachAddition(string[] splitsForDisplay)
+        /// <param name="a_splitsForDisplay">The unparsed strings for display for an item.</param>
+        private void SaveNumberOfDisplayLinesOnEachAddition(string[] a_splitsForDisplay)
         {
             int numOfAttrs = 0;
-            foreach (string split in splitsForDisplay)
+            foreach (string split in a_splitsForDisplay)
             {
                 if (!split.Equals("") && !split.Equals("\r") && !split.Equals("~"))
                 {
@@ -293,6 +294,6 @@ namespace RJOPointOfSale
             }
 
             if (numOfAttrs != 0) m_savedIndexesForDisplay.Add(numOfAttrs);
-        }/*private void SaveNumberOfDisplayLinesOnEachAddition(string[] splitsForDisplay)*/
+        }/*private void SaveNumberOfDisplayLinesOnEachAddition(string[] a_splitsForDisplay)*/
     }
 }

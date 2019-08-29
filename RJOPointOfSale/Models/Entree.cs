@@ -73,9 +73,9 @@ namespace RJOPointOfSale
         {
             m_attributes[MenuItemAttributes.Initialized] = hasAttributeFlag;
             EntreeIdentifier = a_postgresDataSet.GetAtIndex(1);
-            for (int i = MenuItemAttributes.SandwichNoBun; i < MenuItemAttributes.SandwichBeefSingle; i++)
+            for (int i = MenuItemAttributes.SandwichNoBun; i <= MenuItemAttributes.SandwichBeefSingle; i++)
             {
-                if (a_postgresDataSet.GetAtIndex(i) == "True")
+                if (a_postgresDataSet.GetAtIndex(i).Equals("True"))
                 {
                     m_attributes[i - 1] = hasAttributeFlag;
                     m_originalAttributes[i - 1] = hasAttributeFlag;

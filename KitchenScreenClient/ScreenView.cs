@@ -4,13 +4,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using RJOPointOfSale;
+using FontStyle = System.Drawing.FontStyle;
 
 namespace KitchenScreenClient
 {
     class ScreenView
     {
         private FlowLayoutPanel m_screen;
+        private List<OnScreenOrderControl> m_onScreen = new List<OnScreenOrderControl>();
         public int CursorPosition { get; set; }
         /// <summary>
         /// A constructor for the ScreenView object. Passes in the 'screen'
@@ -37,21 +41,18 @@ namespace KitchenScreenClient
         /// </remarks>
         /// <param name="a_order">The OnScreenOrder object that contains 
         /// the parsed data that will be displayed on the view.</param>
-        /// <param name="a_textBoxColor">The Color of the order, indicating which order the
+        /// <param name="a_color">The Color of the order, indicating which order the
         /// cursor is currently on.</param>
-        public void AddElementToScreen(OnScreenOrder a_order, Color a_textBoxColor)
+        public void AddElementToScreenWithControls(OnScreenOrder a_order, Color a_color)
         {
-            TextBox element = new TextBox { Multiline = true, ReadOnly = true, BackColor = a_textBoxColor };
+            OnScreenOrderControl newOrderOnScreen = new OnScreenOrderControl{BackColor = a_color};
 
-            for (int i = 0; i < a_order.SizeOfOrder; i++)
-            {
-                element.Text += a_order.GetElementAtIndex(i) + Environment.NewLine;
-            }
+            newOrderOnScreen.PostRegularElementsToControl(a_order);
+            newOrderOnScreen.PostVoidedElementsToControl(a_order);
+            newOrderOnScreen.FinalizeOnScreenInfo();
 
-            Size renderSize = TextRenderer.MeasureText(element.Text, element.Font);
-            element.ClientSize = new Size(200, renderSize.Height);
+            m_screen.Controls.Add(newOrderOnScreen);
 
-            m_screen.Controls.Add(element);
         }/*public void AddElementToScreen(OnScreenOrder a_order, Color a_textBoxColor)*/
 
         /// <summary>
