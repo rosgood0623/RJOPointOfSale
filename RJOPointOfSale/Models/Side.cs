@@ -11,9 +11,9 @@ namespace RJOPointOfSale
     {
         public string SideIdentifier { get; private set; }
 
-        public override int CalculatePrice()
+        public override decimal CalculatePrice()
         {
-            return 0;
+            return Price;
         }
 
         /// <summary>

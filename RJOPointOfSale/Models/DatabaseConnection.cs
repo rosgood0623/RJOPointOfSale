@@ -219,6 +219,38 @@ namespace RJOPointOfSale
             }
             return retrievedData;
         }/* public List<PostgresDataSet> QueryBeverageRetrieval(string a_beverage)*/
+
+
+        public List<PostgresDataSet> QuerySignatureBasePriceRetrieval(string a_signature)
+        {
+            List<PostgresDataSet> retrievedData = new List<PostgresDataSet>();
+
+            using (NpgsqlConnection con = new NpgsqlConnection(m_strCon))
+            {
+                con.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand(m_sqlString, con);
+
+                var param = cmd.CreateParameter();
+                param.ParameterName = "signatureName";
+                param.Value = a_signature;
+                param.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Text;
+
+                cmd.Parameters.Add(param);
+
+                m_sqlReader = cmd.ExecuteReader();
+
+                for (int i = 0; m_sqlReader.Read(); i++)
+                {
+                    PostgresDataSet postgresData = new PostgresDataSet();
+                    for (int j = 0; j < m_sqlReader.FieldCount; j++)
+                    {
+                        postgresData.AddData(m_sqlReader[j].ToString());
+                    }
+                    retrievedData.Add(postgresData);
+                }
+            }
+            return retrievedData;
+        }/* public List<PostgresDataSet> QueryBeverageRetrieval(string a_beverage)*/
     }
 }
 

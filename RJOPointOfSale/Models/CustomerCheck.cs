@@ -14,6 +14,7 @@ namespace RJOPointOfSale
         private readonly List<Meal> m_customerOrders = new List<Meal>();
         private readonly List<List<int>> m_mealMatrix = new List<List<int>>();
         private const int m_itemMissingInMeal = -1;
+        private readonly List<decimal> m_pricingOfOrders = new List<decimal>();
         public string Name { get; set; }
         /// <summary>
         /// The default constructor for the CustomerCheck object. Generates a unique
@@ -272,5 +273,19 @@ namespace RJOPointOfSale
 
             return new Tuple<int, int>(targetMeal, itemType);
         }/*public Tuple<int, int> FindMealViaMatrix(int a_selectionIndex)*/
+
+        public List<decimal> CompilePricingOfOrders()
+        {
+            List<decimal> pricing = new List<decimal>();
+            foreach (Meal m in m_customerOrders)
+            {
+                foreach (decimal price in m.RetrieveMealPrices())
+                {
+                    pricing.Add(price);
+                }
+            }
+
+            return pricing;
+        }
     }
 }

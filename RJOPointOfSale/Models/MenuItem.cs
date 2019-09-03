@@ -14,7 +14,6 @@ namespace RJOPointOfSale
         protected const int m_columnNameIndex = 1;
         protected const int m_columnPriceIndex = 2;
         public decimal Price { get; protected set; }
-        public abstract int CalculatePrice();
-        
+        public abstract decimal CalculatePrice();
     }
 }

@@ -148,6 +148,7 @@ namespace KitchenScreenClient
 
             }
         }/*private void UpdateScreenView()*/
+
         /// <summary>
         /// This method is responsible for adding new data to the 
         /// screen's model. 
@@ -177,6 +178,15 @@ namespace KitchenScreenClient
 
         }/*public void ConvertDataFromPoSIntoScreenElement(string a_message)*/
 
+        /// <summary>
+        /// Determines which OnScreenOrder is void applies to using the check ID and order existence
+        /// </summary>
+        /// <remarks>
+        /// NAME: SearchForVoidCandidate 
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/1/2019
+        /// </remarks>
+        /// <param name="a_voidMessage">The void command sent from the main PoS menu</param>
         private void SearchForVoidCandidate(string a_voidMessage)
         {
             a_voidMessage = a_voidMessage.Replace("VOID\n", string.Empty);

@@ -14,14 +14,14 @@ namespace RJOPointOfSale
         private readonly int[] m_attributes = new int[MenuItemAttributes.NumOfAttributes];
         private readonly int[] m_originalAttributes = new int[MenuItemAttributes.NumOfAttributes];
         private readonly List<string> m_actionModifications = new List<string>();
+        private PriceCalculator priceCalculator;
         public string EntreeIdentifier { get; private set; }
 
-
-        public override int CalculatePrice()
+        public override decimal CalculatePrice()
         {
-            PriceCalculator pc = new PriceCalculator(this);
-            pc.Calculate();
-            return 0;
+            priceCalculator = new PriceCalculator(this);
+            decimal adjustedPrice = priceCalculator.Calculate();
+            return adjustedPrice;
         }
         /// <summary>
         /// The setup for the DatabaseConnection object to retrieve the data from the database.
@@ -49,14 +49,36 @@ namespace RJOPointOfSale
                 {
                     FillAttributes(data_set[0]);
                 }
-
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }/*public void RetrieveAttributesFromDb(string a_productName)*/
+
+        public void RetrieveBasePriceFromDb(string a_productName)
+        {
+            try
+            {
+                conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
+                {
+                    Query = @"SELECT * FROM public.tbl_signatures_prices WHERE tbl_signatures_prices.name = :signatureName"
+                };
+
+                List<PostgresDataSet> data_set = new List<PostgresDataSet>();
+                data_set = conn.QuerySignatureRetrieval(a_productName);
+                numOfRetrievedRows = data_set.Count;
+
+                if (numOfRetrievedRows > 0)
+                {
+                    Price = Convert.ToDecimal(data_set[0].GetAtIndex(m_columnPriceIndex));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }/*public void RetrieveBasePriceFromDb(string a_productName)*/
 
         /// <summary>
         /// This method uses the data retrieved from the database querying and sets the attributes 
@@ -81,6 +103,7 @@ namespace RJOPointOfSale
                     m_originalAttributes[i - 1] = hasAttributeFlag;
                 }
             }
+
         } /* public void FillAttributes(PostgresDataSet a_postgresDataSet)*/
 
         /// <summary>
@@ -132,25 +155,28 @@ namespace RJOPointOfSale
             {
                 case "Single":
                     m_attributes[MenuItemAttributes.SandwichBeefSingle] = hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichBeefSingle] = hasAttributeFlag;
                     EntreeIdentifier += " Single";
                     break;
                 case "Double":
                     m_attributes[MenuItemAttributes.SandwichBeefDouble] = hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichBeefDouble] = hasAttributeFlag;
                     EntreeIdentifier += " Double";
                     break;
                 case "Grilled":
                     m_attributes[MenuItemAttributes.SandwichGrilledChicken] = hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichGrilledChicken] = hasAttributeFlag;
                     EntreeIdentifier += " Grilled";
                     break;
                 case "Crispy":
                     m_attributes[MenuItemAttributes.SandwichCrispyChicken] = hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichCrispyChicken] = hasAttributeFlag;
                     EntreeIdentifier += " Crispy";
                     break;
                 case "Black Bean":
                     m_attributes[MenuItemAttributes.SandwichBlackBean] = hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichBlackBean] = hasAttributeFlag;
                     EntreeIdentifier += " BB";
-                    break;
-                default:
                     break;
             }
         }/* public void SetProteinType(string a_type)*/

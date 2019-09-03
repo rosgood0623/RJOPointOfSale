@@ -99,7 +99,7 @@ namespace RJOPointOfSale
         }/*public void FillMealDisplay()*/
 
         /// <summary>
-        /// Parses the EntreeView into suitable view strings. Uses null-coalesing operator to parse
+        /// Parses the EntreeView into suitable view strings. Uses null-coalescing operator to parse
         /// out potential exceptions. Adds the line break for parsing after the entire entree with any
         /// modifiers is added.
         /// </summary>

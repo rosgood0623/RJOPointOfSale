@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 
 namespace RJOPointOfSale
@@ -13,10 +15,16 @@ namespace RJOPointOfSale
         private readonly List<MealView> m_customerMealViews = new List<MealView>();
         private readonly BindingList<string> m_menuItemsForDisplay = new BindingList<string>();
         private readonly List<int> m_savedIndexesForDisplay = new List<int>();
+        private readonly List<decimal> m_pricingOfOrders = new List<decimal>();
+
+        private const string m_tilde = "~";
+        private const string m_lineFeed = "\r";
+        private const string m_kidsMeal = "Kids";
+
 
         /// <summary>       
         /// A constructor for the CustomerCheckView. Sets 
-        /// it's customer check and enables the BindingList events.
+        /// its customer check and enables the BindingList events.
         /// </summary>
         /// <remarks>
         /// NAME: CustomerCheckView
@@ -29,6 +37,41 @@ namespace RJOPointOfSale
             m_customerCheck = a_customerOrders;
             m_menuItemsForDisplay.ListChanged += MenuItemsForDisplay_ListChanged;
         }/*public CustomerCheckView(CustomerCheck a_customerOrders)*/
+
+        /// <summary>
+        /// Clears and re-initializes all members for updating.
+        /// </summary>
+        /// <remarks>
+        /// NAME: UpdateMembersForDisplay
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/16/2019
+        /// </remarks>
+        /// <param name="a_customerCheck">The CustomerCheck that belongs to this CustomerCheckView</param>
+        public void UpdateMembersForDisplay(CustomerCheck a_customerCheck)
+        {
+            ClearMembersForReinitialization();
+            m_customerCheck = a_customerCheck;
+            RefreshMealViews();
+            RetrieveItemDetails();
+            CompleteMealPricingForView();
+        }/*public void UpdateMembersForDisplay(CustomerCheck a_customerCheck)*/
+
+        /// <summary>
+        /// Clears all the members that are vital for display to ensure there are no garbage or
+        /// leftover values from updating.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ClearMembersForReinitialization
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/16/2019
+        /// </remarks>
+        public void ClearMembersForReinitialization()
+        {
+            m_customerCheck = null;
+            m_menuItemsForDisplay.Clear();
+            m_customerMealViews.Clear();
+            m_pricingOfOrders.Clear();
+        }/*public void ClearMembersForReinitialization()*/
 
         /// <summary>
         /// Using the meals within the CustomerCheck, generate their respective
@@ -52,23 +95,6 @@ namespace RJOPointOfSale
         }/*public void RefreshMealViews()*/
 
         /// <summary>
-        /// Clears and reinitializes all members for updating.
-        /// </summary>
-        /// <remarks>
-        /// NAME: UpdateMembersForDisplay
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/16/2019
-        /// </remarks>
-        /// <param name="a_customerCheck">The CustomerCheck that belongs to this CustomerCheckView</param>
-        public void UpdateMembersForDisplay(CustomerCheck a_customerCheck)
-        {
-            ClearMembersForReinitialization();
-            m_customerCheck = a_customerCheck;
-            RefreshMealViews();
-            RetrieveItemDetails();
-        }/*public void UpdateMembersForDisplay(CustomerCheck a_customerCheck)*/
-
-        /// <summary>
         /// Retrieves the item details from each meal view.
         /// </summary>
         /// <remarks>
@@ -85,6 +111,67 @@ namespace RJOPointOfSale
                 PerformMealViewFormatting(mv);
             }
         }/*public void RetrieveItemDetails()*/
+
+
+        private void CompleteMealPricingForView()
+        {
+            m_pricingOfOrders.AddRange(m_customerCheck.CompilePricingOfOrders());
+        }
+
+        public void ModifyLinesWithPrices()
+        {
+            List<int> priceIndexes = MakeSavedIndexesUsefulForPricing();
+            
+            for (int i = 0; i < priceIndexes.Count - 1; i++)
+            {
+                string target = m_menuItemsForDisplay[priceIndexes[i]];
+                m_menuItemsForDisplay[priceIndexes[i]] = target.PadRight(40, ' ') + m_pricingOfOrders[i];
+
+            }
+
+        }
+
+        private List<int> MakeSavedIndexesUsefulForPricing()
+        {
+            List<int> newIndexes = new List<int>();
+            newIndexes.Add(0);
+
+            for (int i = 0; i < m_savedIndexesForDisplay.Count; i++)
+            {
+                int next = m_savedIndexesForDisplay[i];
+                newIndexes.Add(newIndexes[i] + next);
+            }
+
+            return newIndexes;
+        }
+
+        /// <summary>
+        /// Gets the raw display items from the MealView and parses out
+        /// the vital information.
+        /// </summary>
+        /// <remarks>
+        /// NAME: PerformMealViewFormatting
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/16/2019
+        /// </remarks>
+        /// <param name="a_view">The MealView to parse data from.</param>
+        private void PerformMealViewFormatting(MealView a_view)
+        {
+            a_view.FillMealDisplay();
+            BindingList<string> viewDisplayDetails = a_view.GetDisplay();
+            string[] indexArr = new string[viewDisplayDetails.Count];
+            viewDisplayDetails.CopyTo(indexArr, 0);
+
+            SaveNumberOfDisplayLinesOnEachAddition(indexArr);
+
+            foreach (string val in viewDisplayDetails)
+            {
+                if (!val.Equals("") && !val.Equals(m_lineFeed) && !val.Equals(m_tilde))
+                {
+                    m_menuItemsForDisplay.Add(val);
+                }
+            }
+        }/*private void PerformMealViewFormatting(MealView a_view)*/
 
         /// <summary>
         /// An accessor method for getting the full check's details for displaying.
@@ -129,7 +216,7 @@ namespace RJOPointOfSale
 
                     foreach (string str in tempMealView.GetDisplay())
                     {
-                        if (!str.Contains("~"))
+                        if (!str.Contains(m_tilde))
                         {
                             stringSender.Add(str + '\n');
                         }
@@ -187,22 +274,6 @@ namespace RJOPointOfSale
         }/*void MenuItemsForDisplay_ListChanged(object sender, ListChangedEventArgs e)*/
 
         /// <summary>
-        /// Clears all the members that are vital for display to ensure there are no garbage or
-        /// leftover values from updating.
-        /// </summary>
-        /// <remarks>
-        /// NAME: ClearMembersForReinitialization
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/16/2019
-        /// </remarks>
-        public void ClearMembersForReinitialization()
-        {
-            m_customerCheck = null;
-            m_menuItemsForDisplay.Clear();
-            m_customerMealViews.Clear();
-        }/*public void ClearMembersForReinitialization()*/
-
-        /// <summary>
         /// This method is used to retrieve at what index in the display the user 
         /// selected the item. This is done this way because every item has a chance of 
         /// being a variable number of lines due to modification.
@@ -240,34 +311,6 @@ namespace RJOPointOfSale
         }/*public int GetIndexOfSelected(int a_value)*/
 
         /// <summary>
-        /// Gets the raw display items from the MealView and parses out
-        /// the vital information.
-        /// </summary>
-        /// <remarks>
-        /// NAME: PerformMealViewFormatting
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/16/2019
-        /// </remarks>
-        /// <param name="a_view">The MealView to parse data from.</param>
-        private void PerformMealViewFormatting(MealView a_view)
-        {
-            a_view.FillMealDisplay();
-            BindingList<string> viewDisplayDetails = a_view.GetDisplay();
-            string[] indexArr = new string[viewDisplayDetails.Count];
-            viewDisplayDetails.CopyTo(indexArr, 0);
-
-            SaveNumberOfDisplayLinesOnEachAddition(indexArr);
-
-            foreach (string val in viewDisplayDetails)
-            {
-                if (!val.Equals("") && !val.Equals("\r") && !val.Equals("~"))
-                {
-                    m_menuItemsForDisplay.Add(val);
-                }
-            }
-        }/*private void PerformMealViewFormatting(MealView a_view)*/
-
-        /// <summary>
         /// Saves the number of lines that will be shown in the display that represents
         /// that one item.
         /// </summary>
@@ -282,11 +325,17 @@ namespace RJOPointOfSale
             int numOfAttrs = 0;
             foreach (string split in a_splitsForDisplay)
             {
-                if (!split.Equals("") && !split.Equals("\r") && !split.Equals("~"))
+                if (split.Contains(m_kidsMeal))
+                {
+                    numOfAttrs += 3;
+                    break;
+                }
+
+                if (!split.Equals("") && !split.Equals(m_lineFeed) && !split.Equals(m_tilde))
                 {
                     numOfAttrs++;
                 }
-                else if (split.Equals("~") && numOfAttrs != 0)
+                else if (split.Equals(m_tilde) && numOfAttrs != 0)
                 {
                     m_savedIndexesForDisplay.Add(numOfAttrs);
                     numOfAttrs = 0;

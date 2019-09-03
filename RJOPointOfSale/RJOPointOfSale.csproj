@@ -89,54 +89,54 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeModification.cs">
+    <Compile Include="Forms\AttributeModification.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AttributeModification.Designer.cs">
+    <Compile Include="Forms\AttributeModification.Designer.cs">
       <DependentUpon>AttributeModification.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Beverage.cs" />
-    <Compile Include="BeverageSelectionForm.cs">
+    <Compile Include="Forms\BeverageSelectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BeverageSelectionForm.Designer.cs">
+    <Compile Include="Forms\BeverageSelectionForm.Designer.cs">
       <DependentUpon>BeverageSelectionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\BeverageView.cs" />
     <Compile Include="Models\CustomerCheck.cs" />
     <Compile Include="Views\CustomerCheckView.cs" />
-    <Compile Include="CustomEventArgs.cs" />
+    <Compile Include="Models\CustomEventArgs.cs" />
     <Compile Include="Models\DatabaseConnection.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="HiawathaSocketServer.cs" />
-    <Compile Include="KeyboardForm.cs">
+    <Compile Include="Models\HiawathaSocketServer.cs" />
+    <Compile Include="Forms\KeyboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="KeyboardForm.Designer.cs">
+    <Compile Include="Forms\KeyboardForm.Designer.cs">
       <DependentUpon>KeyboardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\KidsMeal.cs" />
-    <Compile Include="KidsMealModification.cs">
+    <Compile Include="Forms\KidsMealModification.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="KidsMealModification.Designer.cs">
+    <Compile Include="Forms\KidsMealModification.Designer.cs">
       <DependentUpon>KidsMealModification.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainPoSForm.cs">
+    <Compile Include="Forms\MainPoSForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainPoSForm.Designer.cs">
+    <Compile Include="Forms\MainPoSForm.Designer.cs">
       <DependentUpon>MainPoSForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Meal.cs" />
     <Compile Include="Views\MealView.cs" />
     <Compile Include="Models\MenuItem.cs" />
-    <Compile Include="MenuItemAttributes.cs" />
+    <Compile Include="Models\MenuItemAttributes.cs" />
     <Compile Include="Models\PostgresDataSet.cs" />
     <Compile Include="PriceCalculator.cs" />
     <Compile Include="Program.cs" />
@@ -150,22 +150,22 @@
     <Compile Include="Views\EntreeView.cs" />
     <Compile Include="Models\Side.cs" />
     <Compile Include="Views\SideView.cs" />
-    <EmbeddedResource Include="AttributeModification.resx">
+    <EmbeddedResource Include="Forms\AttributeModification.resx">
       <DependentUpon>AttributeModification.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BeverageSelectionForm.resx">
+    <EmbeddedResource Include="Forms\BeverageSelectionForm.resx">
       <DependentUpon>BeverageSelectionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="KeyboardForm.resx">
+    <EmbeddedResource Include="Forms\KeyboardForm.resx">
       <DependentUpon>KeyboardForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="KidsMealModification.resx">
+    <EmbeddedResource Include="Forms\KidsMealModification.resx">
       <DependentUpon>KidsMealModification.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainPoSForm.resx">
+    <EmbeddedResource Include="Forms\MainPoSForm.resx">
       <DependentUpon>MainPoSForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

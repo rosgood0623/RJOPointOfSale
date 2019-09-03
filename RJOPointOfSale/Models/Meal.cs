@@ -258,5 +258,25 @@ namespace RJOPointOfSale
         {
             return m_entree?.EntreeIdentifier.Contains("Kids") ?? false;
         }/*public bool IsKidsMeal()*/
+
+        public List<decimal> RetrieveMealPrices()
+        {
+            List<decimal> mealPricing = new List<decimal>();
+
+            if (HasEntree())
+            {
+                mealPricing.Add(m_entree.CalculatePrice());
+            }
+            if (HasSide() && !IsKidsMeal())
+            {
+                mealPricing.Add(m_side.CalculatePrice());
+            }
+            if (HasBeverage() && !IsKidsMeal())
+            {
+                mealPricing.Add(m_beverage.CalculatePrice());
+            }
+
+            return mealPricing;
+        }
     }
 }

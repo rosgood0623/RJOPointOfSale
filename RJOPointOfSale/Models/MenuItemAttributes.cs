@@ -60,6 +60,55 @@ namespace RJOPointOfSale
         public const string NoAttribute = "NO";
         public const string AddAttribute = "ADD";
 
+        public const int PremiumAttributeGuac = 15;
+        public const int PremiumAttributeMushrooms = 21;
+        public const int PremiumAttributeBacon = 22;
+        public const int PremiumAttributeAmerican = 24;
+        public const int PremiumAttributePepperJack = 25;
+        public const int PremiumAttributeSwiss = 26;
+        public const int PremiumAttributeCheddar = 27;
+        public const int PremiumAttributeBlueCheese = 28;
+        public const int PremiumAttributeAvocado = 30;
+        public const int PremiumAttributeHaystacks = 31;
+        public const int PremiumAttributeFriedEgg = 32;
+        public const int PremiumAttributeBeefSingle = 33;
+        public const int PremiumAttributeBeefDouble = 34;
+        public const int PremiumAttributeGrilledChicken = 35;
+        public const int PremiumAttributeCrispyChicken = 36;
+        public const int PremiumAttributeBlackBean = 37;
+
+        public static int[] PremiumAttributes =
+        {
+            PremiumAttributeGuac, PremiumAttributeMushrooms, PremiumAttributeBacon,
+            PremiumAttributeAmerican, PremiumAttributePepperJack, PremiumAttributeSwiss,
+            PremiumAttributeCheddar, PremiumAttributeBlueCheese, PremiumAttributeAvocado,
+            PremiumAttributeHaystacks, PremiumAttributeFriedEgg, PremiumAttributeBeefSingle,
+            PremiumAttributeBeefDouble, PremiumAttributeGrilledChicken, PremiumAttributeCrispyChicken,
+            PremiumAttributeBlackBean
+        };
+
+
+        public static int[] PremiumAttributesToppings = 
+        {
+            PremiumAttributeGuac, PremiumAttributeMushrooms, PremiumAttributeBacon,
+            PremiumAttributeAvocado, PremiumAttributeHaystacks, PremiumAttributeFriedEgg
+        };
+
+        public static int[] PremiumAttributesCheese =
+        {
+            PremiumAttributeAmerican, PremiumAttributePepperJack,
+            PremiumAttributeSwiss, PremiumAttributeCheddar, PremiumAttributeBlueCheese
+            
+        };
+
+        public static int[] PremiumAttributesProtein =
+        {
+            PremiumAttributeBeefSingle, PremiumAttributeBeefDouble,
+            PremiumAttributeGrilledChicken, PremiumAttributeCrispyChicken,
+            PremiumAttributeBlackBean
+        };
+
+
         public const int NumOfAttributes = 38;
 
         public static Dictionary<int, string> attributesDictionary = new Dictionary<int, string>

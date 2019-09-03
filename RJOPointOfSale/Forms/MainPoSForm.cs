@@ -3,7 +3,6 @@ using RJOPointOfSale.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -13,9 +12,9 @@ namespace RJOPointOfSale
 {
     public partial class MainPoSForm : Form
     {
-        /*TODO: Implement the Clear button.*/
-        /*TODO: Implement Pricing
-          TODO: Later On: A system clock on the this form*/
+        /*TODO: Implement the Clear button.
+          TODO: Try to figure out the padding.*/
+        
         private readonly HiawathaSocketServer m_server = new HiawathaSocketServer();
         private DatabaseConnection m_conn;        
         private int m_numOfRetrievedRows;
@@ -166,8 +165,7 @@ namespace RJOPointOfSale
         {
             Button currentButton = sender as Button;
             m_currentlySelectedTab = (int)currentButton.Tag;
-            m_customerCheckView.ClearMembersForReinitialization();
-            m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
+            UpdateDisplay();
         }/*private void BtnTabInfo_Click(object sender, EventArgs e)*/
 
         /// <summary>
@@ -201,7 +199,7 @@ namespace RJOPointOfSale
         }/*private void BtnCloseTab_Click(object sender, EventArgs e)*/
 
         /// <summary>
-        /// Iterates through the list of currently open tabs and redefine's their tags.
+        /// Iterates through the list of currently open tabs and redefines their tags.
         /// Is called when the number of open tabs are modified. Important to ensure Model/View
         /// synchronicity
         /// </summary>
@@ -382,15 +380,18 @@ namespace RJOPointOfSale
             {
                 //Since there is no "Classic Chicken" button, I just need to pass "ClassicChicken" so the db knows to get the chicken version of this signature
                 signature.RetrieveAttributesFromDb("ClassicChicken");
+                signature.RetrieveBasePriceFromDb("ClassicChicken");
             }
             else if (proteinButton.Text.Equals("Crispy") && m_selectedSignature.Text.Equals("Classic Smash"))
             {
                 signature.RetrieveAttributesFromDb("ClassicCrispy");
+                signature.RetrieveBasePriceFromDb("ClassicCrispy");
+
             }
             else
             {
                 signature.RetrieveAttributesFromDb((string)m_selectedSignature.Tag);
-
+                signature.RetrieveBasePriceFromDb((string)m_selectedSignature.Tag);
             }
 
             signature.SetProteinType(proteinButton.Text);
@@ -400,6 +401,7 @@ namespace RJOPointOfSale
             m_customerChecks[m_currentlySelectedTab].CreateNewMealOrAddEntreeToMeal(signature);
             m_selectedSignature.Checked = false;
             m_selectedSignature = null;
+            Debug.WriteLine(signature.CalculatePrice());
             UpdateDisplay();
         }/*private void BtnSignatureAndProteinSelection_Click(object sender, EventArgs e)*/
 
@@ -422,6 +424,7 @@ namespace RJOPointOfSale
             Entree signature = new Entree();
 
             signature.RetrieveAttributesFromDb((string)selectedSalad.Tag);
+            signature.RetrieveBasePriceFromDb((string)selectedSalad.Tag);
 
             AttributeModification atModForm = new AttributeModification(signature);
             atModForm.ShowDialog();
@@ -448,6 +451,7 @@ namespace RJOPointOfSale
             Entree sandwich = new Entree();
 
             sandwich.RetrieveAttributesFromDb((string)kidsMealButton.Tag);
+            sandwich.RetrieveBasePriceFromDb((string)kidsMealButton.Tag);
 
             KidsMeal kidsMeal = new KidsMeal();
             kidsMeal.AddEntreeToMeal(sandwich);
@@ -515,23 +519,8 @@ namespace RJOPointOfSale
         private void UpdateDisplay()
         {
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
+            m_customerCheckView.ModifyLinesWithPrices();
         }/*private void UpdateDisplay()*/
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// NAME: LbCustomerCheck_Format
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/13/2019
-        /// </remarks>
-        /// <param name="sender">The object that triggers the event</param>
-        /// <param name="e">The EventArgs object related to the Format event</param>    
-        private void LbCustomerCheck_Format(object sender, ListControlConvertEventArgs e)
-        {
-            //string toBeFormatted = e.ListItem.ToString();
-            //string[] values = toBeFormatted.Split('\n');
-        }/*private void LbCustomerCheck_Format(object sender, ListControlConvertEventArgs e)*/
 
         /// <summary>
         /// Handles the logic for when the user selects an item in the check for modification.
@@ -647,12 +636,12 @@ namespace RJOPointOfSale
                         break;
                 }
             }
-            else if (voidOrDelete && isKidsMeal)
+            else if (voidOrDelete)
             {
                 SendVoidCommandForKidsMeal(mealTuple.Item1);
                 DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
             }
-            else if (!voidOrDelete && isKidsMeal)
+            else if (isKidsMeal)
             {
                 DeleteItemOnTill(mealTuple.Item1, mealTuple.Item2);
             }
@@ -662,10 +651,19 @@ namespace RJOPointOfSale
             }
             
             m_customerChecks[m_currentlySelectedTab].ClearEmptyMeals();
-            m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
+            UpdateDisplay();
 
         }/*private void BtnDeleteItem_Click(object sender, EventArgs e)*/
 
+        /// <summary>
+        /// Ensures there are items on the till to delete to avoid index out of range exceptions.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ValidateDeleteAction
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/1/2019
+        /// </remarks>
+        /// <returns>True if there are no items to delete, false otherwise.</returns>
         private bool ValidateDeleteAction()
         {
             if (m_customerChecks[m_currentlySelectedTab].NumberOfMeals() == 0)
@@ -675,7 +673,7 @@ namespace RJOPointOfSale
             }
 
             return false;
-        }
+        }/*private bool ValidateDeleteAction()*/
 
         /// <summary>
         /// Determines if the current delete action is a void or standard delete. A void is
@@ -724,6 +722,16 @@ namespace RJOPointOfSale
             }
         }/*private void DeleteItemOnTill(int a_mealIndex, int a_itemIndex)*/
 
+        /// <summary>
+        /// Handles the composing of the void command for an Entree item. Parses the selected
+        /// Entree's view and sends it to the KitchenScreenClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: SendVoidCommandForEntree
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/1/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The index of the meal of which exists the entree to void.</param>
         private void SendVoidCommandForEntree(int a_mealIndex)
         {
             Entree targetEntree = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).GetEntree();
@@ -745,8 +753,18 @@ namespace RJOPointOfSale
             string toBeSent = string.Join(string.Empty, attributesOfVoid);
             m_server.SendToAll(toBeSent);
             UpdateDisplay();
-        }
+        }/*private void SendVoidCommandForEntree(int a_mealIndex)*/
 
+        /// <summary>
+        /// Handles the composing of the void command for an Side item. Parses the selected
+        /// Side's view and sends it to the KitchenScreenClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: SendVoidCommandForSide
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/1/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The index of the meal of which exists the side to void.</param>
         private void SendVoidCommandForSide(int a_mealIndex)
         {
             Side targetSide = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).GetSide();
@@ -760,8 +778,18 @@ namespace RJOPointOfSale
             string toBeSent = string.Join(string.Empty, attributesOfVoid);
             m_server.SendToAll(toBeSent);
             UpdateDisplay();
-        }
+        }/*private void SendVoidCommandForSide(int a_mealIndex)*/
 
+        /// <summary>
+        /// Handles the composing of the void command for an Beverage item. Parses the selected
+        /// Beverage's view and sends it to the KitchenScreenClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: SendVoidCommandForBeverage
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/1/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The index of the meal of which exists the beverage to void.</param>
         private void SendVoidCommandForBeverage(int a_mealIndex)
         {
             Beverage targetBeverage = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex).GetBeverage();
@@ -775,8 +803,18 @@ namespace RJOPointOfSale
             string toBeSent = string.Join(string.Empty, attributesOfVoid);
             m_server.SendToAll(toBeSent);
             UpdateDisplay();
-        }
+        }/*private void SendVoidCommandForBeverage(int a_mealIndex)*/
 
+        /// <summary>
+        /// Handles the composing of the void command for an KidsMeal item. Parses the selected
+        /// KidsMeal's view and sends it to the KitchenScreenClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: SendVoidCommandForKidsMeal
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/1/2019
+        /// </remarks>
+        /// <param name="a_mealIndex">The index of the meal of which exists the KidsMeal to void.</param>
         private void SendVoidCommandForKidsMeal(int a_mealIndex)
         {
             Meal targetMeal = m_customerChecks[m_currentlySelectedTab].GetMealAtIndex(a_mealIndex);
@@ -798,10 +836,10 @@ namespace RJOPointOfSale
             string toBeSent = string.Join(string.Empty, attributesOfVoid);
             m_server.SendToAll(toBeSent);
             UpdateDisplay();
-        }
+        }/*private void SendVoidCommandForKidsMeal(int a_mealIndex)*/
 
         /// <summary>
-        /// Removes the KidsMeal at the given index.
+        /// Removes the Meal at the given index.
         /// </summary>
         /// <remarks>
         /// NAME: DeleteKidsMealAtIndex
@@ -914,20 +952,20 @@ namespace RJOPointOfSale
             //For when the user clicks on the empty Listbox.
             if (e.Index < 0) { return; }
 
-            string formattable = lbCustomerCheck.Items[e.Index].ToString();
+            string formatable = lbCustomerCheck.Items[e.Index].ToString();
 
             CustomerCheckView viewTextFormatting = new CustomerCheckView(m_customerChecks[m_currentlySelectedTab]);
 
             if (e.Index < viewTextFormatting.GetCountInDisplayOfSentItems())
             {
-                e.Graphics.DrawString(formattable, new Font("Arial", 10, FontStyle.Italic), Brushes.Black, e.Bounds);
-                e.DrawFocusRectangle();
+                e.Graphics.DrawString(formatable, new Font("Arial", 10, FontStyle.Italic), Brushes.Black, e.Bounds);
             }
             else
             {
-                e.Graphics.DrawString(formattable, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, e.Bounds);
-                e.DrawFocusRectangle();
+                e.Graphics.DrawString(formatable, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, e.Bounds);
             }
+
+            e.DrawFocusRectangle();
 
         }/*private void LbCustomerCheck_DrawItem(object sender, DrawItemEventArgs e)*/
 

@@ -852,10 +852,9 @@
             this.lbCustomerCheck.ItemHeight = 15;
             this.lbCustomerCheck.Location = new System.Drawing.Point(6, 77);
             this.lbCustomerCheck.Name = "lbCustomerCheck";
-            this.lbCustomerCheck.Size = new System.Drawing.Size(276, 379);
+            this.lbCustomerCheck.Size = new System.Drawing.Size(281, 424);
             this.lbCustomerCheck.TabIndex = 96;
             this.lbCustomerCheck.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.LbCustomerCheck_DrawItem);
-            this.lbCustomerCheck.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.LbCustomerCheck_Format);
             // 
             // flpTabs
             // 
