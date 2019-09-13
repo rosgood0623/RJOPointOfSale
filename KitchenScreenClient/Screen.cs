@@ -15,17 +15,26 @@ using HiawathaSocketAsync;
 
 namespace KitchenScreenClient
 {
+    /// <summary>
+    /// The GUI that visually contains the customer order information. This is what
+    /// an employee would interact to assist in communication with the kitchen.
+    /// </summary>
+    /// <remarks>
+    /// NAME: Screen
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public partial class Screen : Form
     {
         private readonly HiawathaSocketClient m_client;
         private readonly List<OnScreenOrder> m_customerOrders = new List<OnScreenOrder>();
         private readonly ScreenView m_screenManager;
-        private int m_cursorSelectionPostion = 0;
+        private int m_cursorSelectionPosition;
 
         private const string m_voidCommand = "VOID";
         /// <summary>
         /// The default constructor for the Screen object. 
-        /// Inits the components and it's members.
+        /// Initializes the components and it's members.
         /// </summary>
         /// <remarks>
         /// NAME: Screen
@@ -54,7 +63,10 @@ namespace KitchenScreenClient
         private void Btn_BumpViaNumbers(object sender, EventArgs e)
         {
             Button positionToBump = sender as Button;
-            int position = (int)positionToBump.Tag;
+            int position = Convert.ToInt32(positionToBump.Tag);
+
+            if (position >= m_customerOrders.Count) { return; }
+
             flpScreenFlow.Controls.RemoveAt(position);
             m_customerOrders.RemoveAt(position);
             UpdateScreenView();
@@ -75,8 +87,8 @@ namespace KitchenScreenClient
         /// <param name="e"></param>
         private void Btn_BumpViaBump(object sender, EventArgs e)
         {
-            flpScreenFlow.Controls.RemoveAt(m_cursorSelectionPostion);
-            m_customerOrders.RemoveAt(m_cursorSelectionPostion);
+            flpScreenFlow.Controls.RemoveAt(m_cursorSelectionPosition);
+            m_customerOrders.RemoveAt(m_cursorSelectionPosition);
             UpdateScreenView();
         }/*private void Btn_BumpViaBump(object sender, EventArgs e)*/
 
@@ -139,11 +151,11 @@ namespace KitchenScreenClient
             {
                 if (i == m_screenManager.CursorPosition)
                 {
-                    m_screenManager.AddElementToScreenWithControls(m_customerOrders[i], Color.Tan);
+                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Tan);
                 }
                 else
                 {
-                    m_screenManager.AddElementToScreenWithControls(m_customerOrders[i], Color.Empty);
+                    m_screenManager.AddElementToScreen(m_customerOrders[i], Color.Empty);
                 }
 
             }
@@ -163,7 +175,7 @@ namespace KitchenScreenClient
         {
             a_message = a_message.Trim('\0');
             
-            if (a_message.Contains("VOID"))
+            if (a_message.Contains(m_voidCommand))
             {
                 SearchForVoidCandidate(a_message);
             }
@@ -215,8 +227,8 @@ namespace KitchenScreenClient
         /// <param name="e">The EventArgs associated with this object.</param>
         private void BtnUpArrow_Click(object sender, EventArgs e)
         {
-            m_cursorSelectionPostion--;
-            m_screenManager.CursorPosition = m_cursorSelectionPostion;
+            m_cursorSelectionPosition--;
+            m_screenManager.CursorPosition = m_cursorSelectionPosition;
             UpdateScreenView();
         }/*private void BtnUpArrow_Click(object sender, EventArgs e)*/
 
@@ -233,8 +245,8 @@ namespace KitchenScreenClient
         /// <param name="e">The EventArgs Associated with this event.</param>
         private void BtnDownArrow_Click(object sender, EventArgs e)
         {
-            m_cursorSelectionPostion++;
-            m_screenManager.CursorPosition = m_cursorSelectionPostion;
+            m_cursorSelectionPosition++;
+            m_screenManager.CursorPosition = m_cursorSelectionPosition;
             UpdateScreenView();
         }/*private void BtnDownArrow_Click(object sender, EventArgs e)*/
     }

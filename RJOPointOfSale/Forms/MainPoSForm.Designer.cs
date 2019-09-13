@@ -94,6 +94,8 @@
             this.flpTabs = new System.Windows.Forms.FlowLayoutPanel();
             this.lbTime = new System.Windows.Forms.Label();
             this.btnSendOrderToKitchen = new System.Windows.Forms.Button();
+            this.lblCheckTotal = new System.Windows.Forms.Label();
+            this.tbTotal = new System.Windows.Forms.TextBox();
             this.pnlSignatures.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,6 +173,7 @@
             // btnToGoBag
             // 
             this.btnToGoBag.BackColor = System.Drawing.Color.Indigo;
+            this.btnToGoBag.Enabled = false;
             this.btnToGoBag.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnToGoBag.Location = new System.Drawing.Point(206, 513);
             this.btnToGoBag.Name = "btnToGoBag";
@@ -182,6 +185,7 @@
             // btnRecallPrevious
             // 
             this.btnRecallPrevious.BackColor = System.Drawing.Color.Indigo;
+            this.btnRecallPrevious.Enabled = false;
             this.btnRecallPrevious.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnRecallPrevious.Location = new System.Drawing.Point(272, 513);
             this.btnRecallPrevious.Name = "btnRecallPrevious";
@@ -193,6 +197,7 @@
             // btnPrintReceipt
             // 
             this.btnPrintReceipt.BackColor = System.Drawing.Color.Indigo;
+            this.btnPrintReceipt.Enabled = false;
             this.btnPrintReceipt.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnPrintReceipt.Location = new System.Drawing.Point(338, 513);
             this.btnPrintReceipt.Name = "btnPrintReceipt";
@@ -204,6 +209,7 @@
             // btnClear
             // 
             this.btnClear.BackColor = System.Drawing.Color.Indigo;
+            this.btnClear.Enabled = false;
             this.btnClear.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnClear.Location = new System.Drawing.Point(404, 513);
             this.btnClear.Name = "btnClear";
@@ -211,7 +217,6 @@
             this.btnClear.TabIndex = 4;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnDeleteItem
             // 
@@ -472,6 +477,7 @@
             // btnPaymentOptions
             // 
             this.btnPaymentOptions.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnPaymentOptions.Enabled = false;
             this.btnPaymentOptions.Location = new System.Drawing.Point(782, 7);
             this.btnPaymentOptions.Name = "btnPaymentOptions";
             this.btnPaymentOptions.Size = new System.Drawing.Size(75, 53);
@@ -744,8 +750,10 @@
             this.btnSaladSide.Name = "btnSaladSide";
             this.btnSaladSide.Size = new System.Drawing.Size(105, 44);
             this.btnSaladSide.TabIndex = 67;
+            this.btnSaladSide.Tag = "SideSalad";
             this.btnSaladSide.Text = "Side Salad";
             this.btnSaladSide.UseVisualStyleBackColor = false;
+            this.btnSaladSide.Click += new System.EventHandler(this.BtnSideSelection_Click);
             // 
             // btnKidsCheese
             // 
@@ -852,7 +860,7 @@
             this.lbCustomerCheck.ItemHeight = 15;
             this.lbCustomerCheck.Location = new System.Drawing.Point(6, 77);
             this.lbCustomerCheck.Name = "lbCustomerCheck";
-            this.lbCustomerCheck.Size = new System.Drawing.Size(281, 424);
+            this.lbCustomerCheck.Size = new System.Drawing.Size(281, 394);
             this.lbCustomerCheck.TabIndex = 96;
             this.lbCustomerCheck.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.LbCustomerCheck_DrawItem);
             // 
@@ -882,12 +890,31 @@
             this.btnSendOrderToKitchen.UseVisualStyleBackColor = false;
             this.btnSendOrderToKitchen.Click += new System.EventHandler(this.BtnSendOrdersOnTill_Click);
             // 
+            // lblCheckTotal
+            // 
+            this.lblCheckTotal.AutoSize = true;
+            this.lblCheckTotal.Location = new System.Drawing.Point(8, 486);
+            this.lblCheckTotal.Name = "lblCheckTotal";
+            this.lblCheckTotal.Size = new System.Drawing.Size(71, 13);
+            this.lblCheckTotal.TabIndex = 99;
+            this.lblCheckTotal.Text = "Check Total: ";
+            // 
+            // tbTotal
+            // 
+            this.tbTotal.Location = new System.Drawing.Point(75, 483);
+            this.tbTotal.Name = "tbTotal";
+            this.tbTotal.ReadOnly = true;
+            this.tbTotal.Size = new System.Drawing.Size(100, 20);
+            this.tbTotal.TabIndex = 100;
+            // 
             // MainPoSForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(870, 594);
             this.ControlBox = false;
+            this.Controls.Add(this.tbTotal);
+            this.Controls.Add(this.lblCheckTotal);
             this.Controls.Add(this.lbTime);
             this.Controls.Add(this.flpTabs);
             this.Controls.Add(this.lbCustomerCheck);
@@ -1028,5 +1055,7 @@
         private System.Windows.Forms.FlowLayoutPanel flpTabs;
         private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.Button btnSendOrderToKitchen;
+        private System.Windows.Forms.Label lblCheckTotal;
+        private System.Windows.Forms.TextBox tbTotal;
     }
 }

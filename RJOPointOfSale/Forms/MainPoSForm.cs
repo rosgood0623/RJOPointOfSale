@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// This is the Point of Sale main menu. The main hub for ringing up
+    /// all types of menu items and sending those items to the KitchenScreenClient.
+    /// </summary>
+    /// <remarks>
+    /// NAME: MainPoSForm
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public partial class MainPoSForm : Form
     {
-        /*TODO: Implement the Clear button.
-          TODO: Try to figure out the padding.*/
-        
         private readonly HiawathaSocketServer m_server = new HiawathaSocketServer();
         private DatabaseConnection m_conn;        
         private int m_numOfRetrievedRows;
@@ -28,7 +34,7 @@ namespace RJOPointOfSale
         private const int m_buttonSizeX = 45;
         private const int m_buttonSizeY = 45;
         private int m_buttonID;
-        private int m_currentlySelectedTab = 0;
+        private int m_currentlySelectedTab;
         private const int m_maximumTabCount = 5;
         private const int m_removeEntree = 0;
         private const int m_removeSide = 1;
@@ -520,6 +526,7 @@ namespace RJOPointOfSale
         {
             m_customerCheckView.UpdateMembersForDisplay(m_customerChecks[m_currentlySelectedTab]);
             m_customerCheckView.ModifyLinesWithPrices();
+            tbTotal.Text = m_customerChecks[m_currentlySelectedTab].CheckTotal.ToString();
         }/*private void UpdateDisplay()*/
 
         /// <summary>
@@ -920,21 +927,6 @@ namespace RJOPointOfSale
             }
         }/*private void DeleteItemWithinMealAtIndex(int a_mealIndex, int a_itemIndex)*/
 
-        //TODO: Clear Button
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/13/2019
-        /// </remarks>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnClear_Click(object sender, EventArgs e)
-        {
-            //TODO: Simply clearing the check is easy, IF no orders have been sent to screen. Will come back to this later. 
-        }/*private void BtnClear_Click(object sender, EventArgs e)*/
-
         /// <summary>
         /// This method is called whenever the customer's orders are drawn to the screen. Handles logic
         /// to give a customer's check visual clarity on which orders have been sent to the screens or not.
@@ -1079,28 +1071,6 @@ namespace RJOPointOfSale
             //m_sisterApplicationID = 0;
             m_enterCodeForm.Show(this);
         }/*private void BtnExit_Click(object sender, EventArgs e)*/
-
-        /// <summary>
-        /// This method Kills the KitchenScreenClient executable. Used primarily when
-        /// the MainPoSForm is exited.
-        /// </summary>
-        /// <remarks>
-        /// NAME: KillSisterProcess
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/13/2019
-        /// </remarks>
-        private void KillSisterProcess()
-        {
-            try
-            {
-                Process sister = Process.GetProcessById(m_sisterApplicationID);
-                sister.Kill();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }/*private void KillSisterProcess()*/
 
         /// <summary>
         /// This click event handles the firing of the customer's orders to the 

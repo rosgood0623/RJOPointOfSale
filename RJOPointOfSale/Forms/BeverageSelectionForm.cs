@@ -10,9 +10,18 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// A simple form that contains all the beverage options
+    /// in one place for easy of use. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: AttributeModification
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public partial class BeverageSelectionForm : Form
     {
-        Beverage m_beverage = new Beverage();
+        private readonly Beverage m_beverage = new Beverage();
         /// <summary>
         /// The default constructor. Simply initializes the components
         /// </summary>

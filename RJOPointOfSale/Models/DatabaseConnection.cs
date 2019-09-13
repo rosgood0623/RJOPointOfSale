@@ -9,12 +9,21 @@ using Npgsql;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The database connection handler class. Facilitates
+    /// and performs all querying to the database
+    /// </summary>
+    /// <remarks>
+    /// NAME: DatabaseConnection
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class DatabaseConnection
     {
         private string m_sqlString;
-        private string m_strCon;
+        private readonly string m_strCon;
         private int m_employeeLogin;
-        NpgsqlDataReader m_sqlReader;
+        private NpgsqlDataReader m_sqlReader;
 
         /// <summary>
         /// The default constructor for the DatabaseConnection object. Initializes the 
@@ -32,18 +41,12 @@ namespace RJOPointOfSale
         }/*public DatabaseConnection(string a_connString)*/
         public string Query
         {
-            set
-            {
-                m_sqlString = value;
-            }
+            set => m_sqlString = value;
         }
 
         public int SetLogin
         {
-            set
-            {
-                m_employeeLogin = value;
-            }
+            set => m_employeeLogin = value;
         }
 
         /// <summary>
@@ -215,38 +218,6 @@ namespace RJOPointOfSale
                     }
                     retrievedData.Add(postgresData);
 
-                }
-            }
-            return retrievedData;
-        }/* public List<PostgresDataSet> QueryBeverageRetrieval(string a_beverage)*/
-
-
-        public List<PostgresDataSet> QuerySignatureBasePriceRetrieval(string a_signature)
-        {
-            List<PostgresDataSet> retrievedData = new List<PostgresDataSet>();
-
-            using (NpgsqlConnection con = new NpgsqlConnection(m_strCon))
-            {
-                con.Open();
-                NpgsqlCommand cmd = new NpgsqlCommand(m_sqlString, con);
-
-                var param = cmd.CreateParameter();
-                param.ParameterName = "signatureName";
-                param.Value = a_signature;
-                param.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Text;
-
-                cmd.Parameters.Add(param);
-
-                m_sqlReader = cmd.ExecuteReader();
-
-                for (int i = 0; m_sqlReader.Read(); i++)
-                {
-                    PostgresDataSet postgresData = new PostgresDataSet();
-                    for (int j = 0; j < m_sqlReader.FieldCount; j++)
-                    {
-                        postgresData.AddData(m_sqlReader[j].ToString());
-                    }
-                    retrievedData.Add(postgresData);
                 }
             }
             return retrievedData;

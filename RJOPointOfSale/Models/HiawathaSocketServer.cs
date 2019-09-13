@@ -10,21 +10,28 @@ using System.Threading.Tasks;
 
 namespace HiawathaSocketAsync
 {
+    /// <summary>
+    /// Handles the 'server-side' of this part of the project. Used to
+    /// send customer order information to the KitchenScreenClient project.
+    /// </summary>
+    /// <remarks>
+    /// NAME: HiawathaSocketServer
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class HiawathaSocketServer
     {
-        IPAddress m_ip;
-        int m_port;
-        TcpListener m_TCPListener;
-
-        List<TcpClient> mClients;
-
-        public EventHandler<ClientConnectedEventArgs> RaiseClientConnectedEvent;
+        private IPAddress m_ip;
+        private int m_port;
+        private TcpListener m_tcpListener;
+        private readonly List<TcpClient> m_clients;
+        public EventHandler<ClientConnectedEventArgs> m_raiseClientConnectedEvent;
 
         public bool KeepRunning { get; set; }
 
         /// <summary>
         /// The default constructor of the HiawathaSocketServer object.
-        /// Inits the clients list.
+        /// Initializes the clients list.
         /// </summary>
         /// <remarks>
         /// NAME: HiawathaSocketServer
@@ -33,7 +40,7 @@ namespace HiawathaSocketAsync
         /// </remarks>
         public HiawathaSocketServer()
         {
-            mClients = new List<TcpClient>();
+            m_clients = new List<TcpClient>();
         }/*HiawathaSocketServer()*/
 
         /// <summary>
@@ -48,7 +55,7 @@ namespace HiawathaSocketAsync
         /// <param name="e">The custom ClientConnectEventArgs associated with this event.</param>
         protected virtual void OnRaiseClientConnectedEvent(ClientConnectedEventArgs e)
         {
-            EventHandler<ClientConnectedEventArgs> handler = RaiseClientConnectedEvent;
+            EventHandler<ClientConnectedEventArgs> handler = m_raiseClientConnectedEvent;
 
             if (handler != null)
             {
@@ -84,20 +91,20 @@ namespace HiawathaSocketAsync
 
             Debug.WriteLine("IP Address: {0} - Port: {1}", m_ip, m_port);
 
-            m_TCPListener = new TcpListener(m_ip, m_port);
+            m_tcpListener = new TcpListener(m_ip, m_port);
 
             try
             {
-                m_TCPListener.Start();
+                m_tcpListener.Start();
 
                 KeepRunning = true;
                 while (KeepRunning)
                 {
-                    var returnedByAccept = await m_TCPListener.AcceptTcpClientAsync();
+                    var returnedByAccept = await m_tcpListener.AcceptTcpClientAsync();
 
-                    mClients.Add(returnedByAccept);
+                    m_clients.Add(returnedByAccept);
 
-                    Debug.WriteLine("Client connected successfully, count: {0} - {1}", mClients.Count, returnedByAccept.Client.RemoteEndPoint);
+                    Debug.WriteLine("Client connected successfully, count: {0} - {1}", m_clients.Count, returnedByAccept.Client.RemoteEndPoint);
 
                     TakeCareOfTCPClient(returnedByAccept);
 
@@ -175,10 +182,10 @@ namespace HiawathaSocketAsync
         /// <param name="paramClient">The client to be removed.</param>
         private void RemoveClient(TcpClient paramClient)
         {
-            if (mClients.Contains(paramClient))
+            if (m_clients.Contains(paramClient))
             {
-                mClients.Remove(paramClient);
-                Debug.WriteLine("Client removed, count: {0}", mClients.Count);
+                m_clients.Remove(paramClient);
+                Debug.WriteLine("Client removed, count: {0}", m_clients.Count);
             }
         }/*RemoveClient(TcpClient paramClient)*/
 
@@ -202,7 +209,7 @@ namespace HiawathaSocketAsync
             {
                 byte[] buffMessage = Encoding.ASCII.GetBytes(leMessage);
 
-                foreach (TcpClient c in mClients)
+                foreach (TcpClient c in m_clients)
                 {
                     await c.GetStream().WriteAsync(buffMessage, 0, buffMessage.Length);
                 }
@@ -226,7 +233,7 @@ namespace HiawathaSocketAsync
         /// </returns>
         public bool NoClients()
         {
-            return mClients.Count == 0;
+            return m_clients.Count == 0;
         }
     }
 }

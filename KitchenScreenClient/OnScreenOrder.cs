@@ -9,15 +9,21 @@ using System.Windows;
 
 namespace KitchenScreenClient
 {
+    /// <summary>
+    /// The model for the customer order information. Handles which pieces of data
+    /// are considered void or standard elements.
+    /// </summary>
+    /// <remarks>
+    /// NAME: OnScreenOrder
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public class OnScreenOrder
     {
         private readonly List<string> m_activeOrder = new List<string>();
         private readonly List<string> m_elementsToBeVoided = new List<string>();
         private readonly List<string> m_voidedElements = new List<string>();
-
-        private string m_orderGUIDNickName;
         private string m_orderGUID;
-        private string m_rawData;
 
         private const int m_orderGUIDNickNamePosition = 0;
         private const int m_orderGUIDPosition = 1;
@@ -34,23 +40,21 @@ namespace KitchenScreenClient
         /// <param name="a_sent">The raw, unparsed order data</param>
         public void ParseSentStringIntoOrder(string a_sent)
         {
-            m_rawData = a_sent;
             string[] parsed = a_sent.Split('\n');
             
             for (int i = 0; i < parsed.Length; i++)
             {
-                if (i == m_orderGUIDNickNamePosition)
+                switch (i)
                 {
-                    m_orderGUIDNickName = parsed[i];
-                    m_activeOrder.Add(parsed[i]);
-                }
-                else if (i == m_orderGUIDPosition)
-                {
-                    m_orderGUID = parsed[i];
-                }
-                else
-                {
-                    m_activeOrder.Add(parsed[i]);
+                    case m_orderGUIDNickNamePosition:
+                        m_activeOrder.Add(parsed[i]);
+                        break;
+                    case m_orderGUIDPosition:
+                        m_orderGUID = parsed[i];
+                        break;
+                    default:
+                        m_activeOrder.Add(parsed[i]);
+                        break;
                 }
             }
 

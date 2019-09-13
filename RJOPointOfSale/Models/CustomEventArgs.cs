@@ -10,13 +10,21 @@ using System.Threading.Tasks;
 
 namespace HiawathaSocketAsync
 {
+    /// <summary>
+    /// The event handler for when a client connects to the server.
+    /// </summary>
+    /// <remarks>
+    /// NAME: ClientConnectedEventArgs
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class ClientConnectedEventArgs : EventArgs
     {
         public string NewClient { get; set; }
 
-        public ClientConnectedEventArgs(string _newClient)
+        public ClientConnectedEventArgs(string a_newClient)
         {
-            NewClient = _newClient;
+            NewClient = a_newClient;
         }
     }
 }

@@ -4,6 +4,15 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The first GUI the user sees. Requires the user to enter
+    /// their designated employee pass code to access the Point Of Sale.
+    /// </summary>
+    /// <remarks>
+    /// NAME: Form1
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public partial class Form1 : Form
     {
         private DatabaseConnection m_conn;
@@ -13,7 +22,7 @@ namespace RJOPointOfSale
         private List<PostgresDataSet> m_pgresDataSet;
         private int m_maxRows;
 
-        private MainPoSForm serializedForm;
+        private MainPoSForm m_serializedForm;
 
         /// <summary>
         /// The default constructor for Form1. Initializes the form's components.
@@ -43,7 +52,6 @@ namespace RJOPointOfSale
         {
             try
             {
-                //m_conn = new DatabaseConnection(Properties.Settings.Default.PostgresSQLConnection); 
                 m_conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection);
             }
             catch (Exception ex)
@@ -67,7 +75,8 @@ namespace RJOPointOfSale
             Button clicked = sender as Button;
             m_strCode += clicked.Text;
             lblCode.Text += '*';
-        } /*rivate void BtnKeypad_Click(object sender, EventArgs e)*/
+        } /*private void BtnKeypad_Click(object sender, EventArgs e)*/
+
         /// <summary>
         /// Clears out the employee code string and the 'encrypted' label code that represents
         /// the employee code.
@@ -103,23 +112,22 @@ namespace RJOPointOfSale
 
             try
             {
-                //m_conn.Query = @"SELECT * FROM public.tbl_employees WHERE ""employeeCode"" = :enteredCode";
                 m_conn.Query = @"SELECT * FROM public.tbl_employees WHERE employeeCode = :enteredCode";
                 m_conn.SetLogin = m_enteredCode;
 
                 m_pgresDataSet = m_conn.QueryEmployeeIdentification();
                 m_maxRows = m_pgresDataSet.Count;
 
-                if (m_maxRows > 0 && serializedForm == null)
+                if (m_maxRows > 0 && m_serializedForm == null)
                 {
                     var mainPoS = new MainPoSForm(m_enteredCode);
                     mainPoS.Show();
                     Hide();
                 }
-                else if (m_maxRows > 0 && serializedForm != null)
+                else if (m_maxRows > 0 && m_serializedForm != null)
                 {
                     MainPoSForm newMainPoSForm = new MainPoSForm();
-                    newMainPoSForm = serializedForm;
+                    newMainPoSForm = m_serializedForm;
                     newMainPoSForm.Show();
                     Hide();
                 }
@@ -136,7 +144,7 @@ namespace RJOPointOfSale
         }/*private void BtnEnter_Click(object sender, EventArgs e)*/
 
         /// <summary>
-        /// Clear the relevent members of this form. Used primarily 
+        /// Clear the relevant members of this form. Used primarily 
         /// to ensure no leftover data from previous form iterations 
         /// is being used.
         /// </summary>
@@ -171,10 +179,26 @@ namespace RJOPointOfSale
 
             if (temp.Owner != null)
             {
-                serializedForm = (MainPoSForm)temp.Owner;
+                m_serializedForm = (MainPoSForm)temp.Owner;
             }
 
             ClearMembers();
         } /*private void Form1_VisibleChanged(object sender, EventArgs e)*/
+
+
+        /// <summary>
+        /// Terminates the program. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: Btn_CloseProgram
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <param name="sender">The object that triggered this event - btnClose</param>
+        /// <param name="e">The EventArgs associated with this program. </param>
+        private void Btn_CloseProgram(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

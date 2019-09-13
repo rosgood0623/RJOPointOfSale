@@ -105,11 +105,11 @@
             // btnKidsMilk
             // 
             this.btnKidsMilk.BackColor = System.Drawing.Color.LightSalmon;
-            this.btnKidsMilk.Enabled = false;
             this.btnKidsMilk.Location = new System.Drawing.Point(306, 12);
             this.btnKidsMilk.Name = "btnKidsMilk";
             this.btnKidsMilk.Size = new System.Drawing.Size(92, 52);
             this.btnKidsMilk.TabIndex = 0;
+            this.btnKidsMilk.Tag = "KidsMilk";
             this.btnKidsMilk.Text = "Kids Milk";
             this.btnKidsMilk.UseVisualStyleBackColor = false;
             this.btnKidsMilk.Click += new System.EventHandler(this.BtnSelection_Click);
@@ -117,11 +117,11 @@
             // btnKidsChocMilk
             // 
             this.btnKidsChocMilk.BackColor = System.Drawing.Color.LightSalmon;
-            this.btnKidsChocMilk.Enabled = false;
             this.btnKidsChocMilk.Location = new System.Drawing.Point(404, 12);
             this.btnKidsChocMilk.Name = "btnKidsChocMilk";
             this.btnKidsChocMilk.Size = new System.Drawing.Size(92, 52);
             this.btnKidsChocMilk.TabIndex = 0;
+            this.btnKidsChocMilk.Tag = "KidsChocMilk";
             this.btnKidsChocMilk.Text = "Kids Choc Milk";
             this.btnKidsChocMilk.UseVisualStyleBackColor = false;
             this.btnKidsChocMilk.Click += new System.EventHandler(this.BtnSelection_Click);
@@ -129,11 +129,11 @@
             // btnKidsApple
             // 
             this.btnKidsApple.BackColor = System.Drawing.Color.LightSalmon;
-            this.btnKidsApple.Enabled = false;
             this.btnKidsApple.Location = new System.Drawing.Point(502, 12);
             this.btnKidsApple.Name = "btnKidsApple";
             this.btnKidsApple.Size = new System.Drawing.Size(92, 52);
             this.btnKidsApple.TabIndex = 0;
+            this.btnKidsApple.Tag = "KidsApple";
             this.btnKidsApple.Text = "Kids Apple";
             this.btnKidsApple.UseVisualStyleBackColor = false;
             this.btnKidsApple.Click += new System.EventHandler(this.BtnSelection_Click);
@@ -504,6 +504,7 @@
             this.Controls.Add(this.btnCoke);
             this.Controls.Add(this.btn30oz);
             this.Controls.Add(this.btn20z);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "BeverageSelectionForm";
             this.Text = "BeverageSelectionForm";
             this.ResumeLayout(false);

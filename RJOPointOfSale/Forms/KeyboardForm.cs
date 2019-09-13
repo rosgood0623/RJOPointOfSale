@@ -10,9 +10,19 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// Handles the ability for the cashier to add a unique
+    /// identifier to the current check. A check will be given
+    /// a default, randomized name if one isn't provided.
+    /// </summary>
+    /// <remarks>
+    /// NAME: KeyboardForm
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public partial class KeyboardForm : Form
     {
-        private CustomerCheck checkToModify;
+        private readonly CustomerCheck m_checkToModify;
 
         /// <summary>
         /// The default constructor for the KeyboardForm. Initializes the components.
@@ -37,10 +47,10 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/17/2019
         /// </remarks>
-        /// <param name="check">The CustomerCheck in which is getting advanced identification.</param>
-        public KeyboardForm(CustomerCheck check) : this()
+        /// <param name="a_check">The CustomerCheck in which is getting advanced identification.</param>
+        public KeyboardForm(CustomerCheck a_check) : this()
         {
-            checkToModify = check;
+            m_checkToModify = a_check;
         } /*public KeyboardForm(CustomerCheck check) : this()*/
 
         /// <summary>
@@ -74,11 +84,11 @@ namespace RJOPointOfSale
         {
             if (lbCheckID.Text.Trim().Length == 0)
             {
-                lbIDErr.Text = "Please Enter a Valid Name";
-                lbCheckID.Text = " ";
+                lbIDErr.Text = @"Please Enter a Valid Name";
+                lbCheckID.Text = @" ";
                 return;
             }
-            checkToModify.Name = lbCheckID.Text;
+            m_checkToModify.Name = lbCheckID.Text;
             Close();
         }/*private void BtnEnter_Click(object sender, EventArgs e)*/
 
@@ -96,8 +106,8 @@ namespace RJOPointOfSale
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             if (lbCheckID.Text.Length == 0) { return; }
-            string currentID = lbCheckID.Text;
-            lbCheckID.Text = currentID.Remove(lbCheckID.Text.Length - 1);
+            string currentId = lbCheckID.Text;
+            lbCheckID.Text = currentId.Remove(lbCheckID.Text.Length - 1);
         }/*private void BtnDelete_Click(object sender, EventArgs e)*/
 
         /// <summary>

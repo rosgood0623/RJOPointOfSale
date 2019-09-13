@@ -11,12 +11,21 @@ using KitchenScreenClient;
 
 namespace HiawathaSocketAsync
 {
+    /// <summary>
+    /// Handles the 'client-side' part of this project. Used to receive customer
+    /// order information from the MainMenuPoS.
+    /// </summary>
+    /// <remarks>
+    /// NAME: HiawathaSocketClient
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class HiawathaSocketClient
     {
-        private Screen m_screen;
-        private IPAddress mServerIPAddress;
-        int mServerPort;
-        TcpClient mClient;
+        private readonly Screen m_screen;
+        private IPAddress m_serverIPAddress;
+        private int m_serverPort;
+        private TcpClient m_client;
 
         /// <summary>
         /// The default constructor for the HiawathaSocketClient object.
@@ -29,9 +38,9 @@ namespace HiawathaSocketAsync
         /// </remarks>
         public HiawathaSocketClient()
         {
-            mClient = null;
-            mServerPort = -1;
-            mServerIPAddress = null;
+            m_client = null;
+            m_serverPort = -1;
+            m_serverIPAddress = null;
         }/*public HiawathaSocketClient()*/
 
         /// <summary>
@@ -58,20 +67,20 @@ namespace HiawathaSocketAsync
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/17/2019
         /// </remarks>
-        /// <param name="a_IPAddressServer">The IP Address entered.</param>
+        /// <param name="a_ipAddressServer">The IP Address entered.</param>
         /// <returns>
         /// Returns true if successfully set, false otherwise.
         /// </returns>
-        public bool SetServerIPAddress(string a_IPAddressServer)
+        public bool SetServerIPAddress(string a_ipAddressServer)
         {
             IPAddress ipaddr;
-            if (!IPAddress.TryParse(a_IPAddressServer, out ipaddr))
+            if (!IPAddress.TryParse(a_ipAddressServer, out ipaddr))
             {
                 Console.WriteLine("Invalid IP Address supplied.");
                 return false;
             }
 
-            mServerIPAddress = ipaddr;
+            m_serverIPAddress = ipaddr;
 
             return true;
         }/*public bool SetServerIPAddress(string a_IPAddressServer)*/
@@ -104,7 +113,7 @@ namespace HiawathaSocketAsync
                 return false;
             }
 
-            mServerPort = portNumber;
+            m_serverPort = portNumber;
             return true;
         }/*public bool SetPortNumber(string a_serverPort)*/
 
@@ -123,17 +132,17 @@ namespace HiawathaSocketAsync
         /// </returns>
         public async Task ConnectToServer()
         {
-            if (mClient == null)
+            if (m_client == null)
             {
-                mClient = new TcpClient();
+                m_client = new TcpClient();
             }
 
             try
             {
-                await mClient.ConnectAsync(mServerIPAddress, mServerPort);
-                Console.WriteLine(@"Connected to server IP/Port: {0} / {1}", mServerIPAddress, mServerPort);
+                await m_client.ConnectAsync(m_serverIPAddress, m_serverPort);
+                Console.WriteLine(@"Connected to server IP/Port: {0} / {1}", m_serverIPAddress, m_serverPort);
 
-                await ReadDataAsync(mClient);
+                await ReadDataAsync(m_client);
             }
             catch (Exception ex)
             {
@@ -169,7 +178,7 @@ namespace HiawathaSocketAsync
                     if (readByteCount <= 0)
                     {
                         Console.WriteLine(@"Connection lost...");
-                        mClient.Close();
+                        m_client.Close();
                         break;
                     }
 
@@ -198,7 +207,7 @@ namespace HiawathaSocketAsync
         /// </returns>
         public bool IsConnected()
         {
-            return mClient.Connected;
+            return m_client.Connected;
         }/*public bool IsConnected()*/
     }
 }

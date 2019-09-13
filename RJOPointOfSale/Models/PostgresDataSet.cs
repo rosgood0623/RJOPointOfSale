@@ -6,9 +6,18 @@ using System.Threading.Tasks;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// A helper class for database querying. Stores the data from the
+    /// database in this object. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class PostgresDataSet
     {
-        private List<string> dataSet;
+        private readonly List<string> m_dataSet;
 
         /// <summary>
         /// The default constructor for the PostgresDataset
@@ -20,7 +29,7 @@ namespace RJOPointOfSale
         /// </remarks>
         public PostgresDataSet()
         {
-            dataSet = new List<string>();
+            m_dataSet = new List<string>();
         }/*public PostgresDataSet()*/
 
         /// <summary>
@@ -31,10 +40,10 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/15/2019
         /// </remarks>
-        /// <param name="dataToAdd"> The data to be added.</param>
-        public void AddData(string dataToAdd)
+        /// <param name="a_dataToAdd"> The data to be added.</param>
+        public void AddData(string a_dataToAdd)
         {
-            dataSet.Add(dataToAdd);
+            m_dataSet.Add(a_dataToAdd);
         }/*public void AddData(string dataToAdd)*/
 
         /// <summary>
@@ -45,11 +54,11 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/15/2019
         /// </remarks>
-        /// <param name="index">The provided index</param>
+        /// <param name="a_index">The provided index</param>
         /// <returns>The data at the given index.</returns>
-        public string GetAtIndex(int index)
+        public string GetAtIndex(int a_index)
         {
-            return dataSet.ElementAt(index);
+            return m_dataSet.ElementAt(a_index);
         }/*public string GetAtIndex(int index)*/
     }
 }

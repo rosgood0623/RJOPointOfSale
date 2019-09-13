@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The model that handles meals, which consists of 
+    /// an entree, side and beverage. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: Meal
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class Meal
     {
         private Entree m_entree;
@@ -259,6 +268,19 @@ namespace RJOPointOfSale
             return m_entree?.EntreeIdentifier.Contains("Kids") ?? false;
         }/*public bool IsKidsMeal()*/
 
+        /// <summary>
+        /// Checks if this meal has each type of item and if it does, add it to
+        /// a list for returning.
+        /// </summary>
+        /// <remarks>
+        /// NAME: CompilePricingOfOrders
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
+        /// <returns>
+        /// A list of decimals that correspond to this meal's prices for each
+        /// item in this meal
+        /// </returns>
         public List<decimal> RetrieveMealPrices()
         {
             List<decimal> mealPricing = new List<decimal>();
@@ -277,6 +299,6 @@ namespace RJOPointOfSale
             }
 
             return mealPricing;
-        }
+        }/*public List<decimal> RetrieveMealPrices()*/
     }
 }

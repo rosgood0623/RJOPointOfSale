@@ -8,6 +8,15 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The view for the side model. Parses how the models information
+    /// will be displayed on the main menu.
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class SideView
     {
         private readonly Side m_side;

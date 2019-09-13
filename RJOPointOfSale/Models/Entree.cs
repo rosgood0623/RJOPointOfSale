@@ -9,18 +9,34 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The model for the entree menu items. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: Entree
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class Entree : MenuItem
     {
         private readonly int[] m_attributes = new int[MenuItemAttributes.NumOfAttributes];
         private readonly int[] m_originalAttributes = new int[MenuItemAttributes.NumOfAttributes];
         private readonly List<string> m_actionModifications = new List<string>();
-        private PriceCalculator priceCalculator;
+        private PriceCalculator m_priceCalculator;
+
+        private const string m_singleIdentifier = "Single";
+        private const string m_doubleIdentifier = "Double";
+        private const string m_grilledIdentifier = "Grilled";
+        private const string m_crispyIdentifier = "Crispy";
+        private const string m_blackBeanIdentifier = "Black Bean";
+
+
         public string EntreeIdentifier { get; private set; }
 
         public override decimal CalculatePrice()
         {
-            priceCalculator = new PriceCalculator(this);
-            decimal adjustedPrice = priceCalculator.Calculate();
+            m_priceCalculator = new PriceCalculator(this);
+            decimal adjustedPrice = m_priceCalculator.Calculate();
             return adjustedPrice;
         }
         /// <summary>
@@ -36,16 +52,16 @@ namespace RJOPointOfSale
         {
             try
             {
-                conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
+                m_conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
                 {
                     Query = @"SELECT * FROM public.tbl_signatures_sandwich WHERE tbl_signatures_sandwich.name = :signatureName"
                 };
 
                 List<PostgresDataSet> data_set = new List<PostgresDataSet>();
-                data_set = conn.QuerySignatureRetrieval(a_productName);
-                numOfRetrievedRows = data_set.Count;
+                data_set = m_conn.QuerySignatureRetrieval(a_productName);
+                m_numOfRetrievedRows = data_set.Count;
 
-                if (numOfRetrievedRows > 0)
+                if (m_numOfRetrievedRows > 0)
                 {
                     FillAttributes(data_set[0]);
                 }
@@ -60,16 +76,16 @@ namespace RJOPointOfSale
         {
             try
             {
-                conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
+                m_conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
                 {
                     Query = @"SELECT * FROM public.tbl_signatures_prices WHERE tbl_signatures_prices.name = :signatureName"
                 };
 
                 List<PostgresDataSet> data_set = new List<PostgresDataSet>();
-                data_set = conn.QuerySignatureRetrieval(a_productName);
-                numOfRetrievedRows = data_set.Count;
+                data_set = m_conn.QuerySignatureRetrieval(a_productName);
+                m_numOfRetrievedRows = data_set.Count;
 
-                if (numOfRetrievedRows > 0)
+                if (m_numOfRetrievedRows > 0)
                 {
                     Price = Convert.ToDecimal(data_set[0].GetAtIndex(m_columnPriceIndex));
                 }
@@ -93,14 +109,14 @@ namespace RJOPointOfSale
         /// retrieved from the database.</param>
         public void FillAttributes(PostgresDataSet a_postgresDataSet)
         {
-            m_attributes[MenuItemAttributes.Initialized] = hasAttributeFlag;
+            m_attributes[MenuItemAttributes.Initialized] = m_hasAttributeFlag;
             EntreeIdentifier = a_postgresDataSet.GetAtIndex(1);
             for (int i = MenuItemAttributes.SandwichNoBun; i <= MenuItemAttributes.SandwichBeefSingle; i++)
             {
                 if (a_postgresDataSet.GetAtIndex(i).Equals("True"))
                 {
-                    m_attributes[i - 1] = hasAttributeFlag;
-                    m_originalAttributes[i - 1] = hasAttributeFlag;
+                    m_attributes[i - 1] = m_hasAttributeFlag;
+                    m_originalAttributes[i - 1] = m_hasAttributeFlag;
                 }
             }
 
@@ -153,29 +169,29 @@ namespace RJOPointOfSale
         {
             switch (a_type)
             {
-                case "Single":
-                    m_attributes[MenuItemAttributes.SandwichBeefSingle] = hasAttributeFlag;
-                    m_originalAttributes[MenuItemAttributes.SandwichBeefSingle] = hasAttributeFlag;
+                case m_singleIdentifier:
+                    m_attributes[MenuItemAttributes.SandwichBeefSingle] = m_hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichBeefSingle] = m_hasAttributeFlag;
                     EntreeIdentifier += " Single";
                     break;
-                case "Double":
-                    m_attributes[MenuItemAttributes.SandwichBeefDouble] = hasAttributeFlag;
-                    m_originalAttributes[MenuItemAttributes.SandwichBeefDouble] = hasAttributeFlag;
+                case m_doubleIdentifier:
+                    m_attributes[MenuItemAttributes.SandwichBeefDouble] = m_hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichBeefDouble] = m_hasAttributeFlag;
                     EntreeIdentifier += " Double";
                     break;
-                case "Grilled":
-                    m_attributes[MenuItemAttributes.SandwichGrilledChicken] = hasAttributeFlag;
-                    m_originalAttributes[MenuItemAttributes.SandwichGrilledChicken] = hasAttributeFlag;
+                case m_grilledIdentifier:
+                    m_attributes[MenuItemAttributes.SandwichGrilledChicken] = m_hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichGrilledChicken] = m_hasAttributeFlag;
                     EntreeIdentifier += " Grilled";
                     break;
-                case "Crispy":
-                    m_attributes[MenuItemAttributes.SandwichCrispyChicken] = hasAttributeFlag;
-                    m_originalAttributes[MenuItemAttributes.SandwichCrispyChicken] = hasAttributeFlag;
+                case m_crispyIdentifier:
+                    m_attributes[MenuItemAttributes.SandwichCrispyChicken] = m_hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichCrispyChicken] = m_hasAttributeFlag;
                     EntreeIdentifier += " Crispy";
                     break;
-                case "Black Bean":
-                    m_attributes[MenuItemAttributes.SandwichBlackBean] = hasAttributeFlag;
-                    m_originalAttributes[MenuItemAttributes.SandwichBlackBean] = hasAttributeFlag;
+                case m_blackBeanIdentifier:
+                    m_attributes[MenuItemAttributes.SandwichBlackBean] = m_hasAttributeFlag;
+                    m_originalAttributes[MenuItemAttributes.SandwichBlackBean] = m_hasAttributeFlag;
                     EntreeIdentifier += " BB";
                     break;
             }
@@ -207,7 +223,7 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/14/2019
         /// </remarks>
-        /// <param name="a_action">The deisred action mod to be added to the entree.</param>
+        /// <param name="a_action">The desired action mod to be added to the entree.</param>
         public void AddActionMod(string a_action)
         {
             if (m_actionModifications.Contains(a_action))

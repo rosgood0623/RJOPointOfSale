@@ -11,6 +11,15 @@ using System.Windows;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The view for the entree model. Facilitates how the item
+    /// is displayed on the Point of Sale.
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class EntreeView
     {
         private readonly Entree m_entree;
@@ -18,6 +27,13 @@ namespace RJOPointOfSale
         private readonly StringBuilder m_attrBuilder = new StringBuilder();
         private const int m_includesThisProteinFlag = 1;
         private const int m_excludesThisProteinFlag = 0;
+        private const string m_actionModIdentifier = "\t**";
+
+        private const string m_singleIdentifier = "Single";
+        private const string m_doubleIdentifier = "Double";
+        private const string m_grilledIdentifier = "Grilled";
+        private const string m_crispyIdentifier = "Crispy";
+        private const string m_blackBeanIdentifier = "BB";
 
         /// <summary>
         /// A constructor for the EntreeView. Initializes the ListChanged event and the Entree object.
@@ -113,23 +129,23 @@ namespace RJOPointOfSale
         /// <param name="a_id">The Entree identification of the entree.</param>
         private void StartAddingTextAttributeProteinAdditionsToViewForBeef(int[] a_attrs, string a_id)
         {
-            if (a_attrs[MenuItemAttributes.SandwichBeefSingle] > m_includesThisProteinFlag && (a_id.Contains("Single") || a_id.Contains("Double")))
-            {
-                AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBeefSingle] - 1, MenuItemAttributes.SandwichBeefSingle);
-            }
-            else if (a_attrs[MenuItemAttributes.SandwichBeefSingle] > m_excludesThisProteinFlag && !a_id.Contains("Single") && !a_id.Contains("Double"))
+            if (a_attrs[MenuItemAttributes.SandwichBeefSingle] > m_includesThisProteinFlag && (a_id.Contains(m_singleIdentifier) || a_id.Contains(m_doubleIdentifier)))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBeefSingle], MenuItemAttributes.SandwichBeefSingle);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichBeefSingle] > m_excludesThisProteinFlag && a_id.Contains("Double"))
+            else if (a_attrs[MenuItemAttributes.SandwichBeefSingle] > m_excludesThisProteinFlag && !a_id.Contains(m_singleIdentifier) && !a_id.Contains(m_doubleIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBeefSingle], MenuItemAttributes.SandwichBeefSingle);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichBeefSingle] == m_excludesThisProteinFlag && a_id.Contains("Single"))
+            else if (a_attrs[MenuItemAttributes.SandwichBeefSingle] > m_excludesThisProteinFlag && a_id.Contains(m_doubleIdentifier))
+            {
+                AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBeefSingle], MenuItemAttributes.SandwichBeefSingle);
+            }
+            else if (a_attrs[MenuItemAttributes.SandwichBeefSingle] == m_excludesThisProteinFlag && a_id.Contains(m_singleIdentifier))
             {
                 AddTextAttributeNoProteinToView();
             }
-            else if (a_attrs[MenuItemAttributes.SandwichBeefDouble] == m_excludesThisProteinFlag && a_id.Contains("Double"))
+            else if (a_attrs[MenuItemAttributes.SandwichBeefDouble] == m_excludesThisProteinFlag && a_id.Contains(m_doubleIdentifier))
             {
                 AddTextAttributeNoProteinToView();
             }
@@ -149,19 +165,19 @@ namespace RJOPointOfSale
         /// <param name="a_id">The Entree Identifier of the entree.</param>
         private void StartAddingTextAttributeProteinAdditionsToViewForGrilled(int[] a_attrs, string a_id)
         {
-            if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] > m_includesThisProteinFlag && a_id.Contains("Grilled"))
+            if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] > m_includesThisProteinFlag && a_id.Contains(m_grilledIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichGrilledChicken] - 1, MenuItemAttributes.SandwichGrilledChicken);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] > m_excludesThisProteinFlag && !a_id.Contains("Grilled"))
+            else if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] > m_excludesThisProteinFlag && !a_id.Contains(m_grilledIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichGrilledChicken], MenuItemAttributes.SandwichGrilledChicken);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] > m_excludesThisProteinFlag && a_id.Contains("Double"))
+            else if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] > m_excludesThisProteinFlag && a_id.Contains(m_doubleIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichGrilledChicken], MenuItemAttributes.SandwichGrilledChicken);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] == m_excludesThisProteinFlag && a_id.Contains("Grilled"))
+            else if (a_attrs[MenuItemAttributes.SandwichGrilledChicken] == m_excludesThisProteinFlag && a_id.Contains(m_grilledIdentifier))
             {
                 AddTextAttributeNoProteinToView();
             }
@@ -181,19 +197,19 @@ namespace RJOPointOfSale
         /// <param name="a_id">The Entree identifier of the entree.</param>
         private void StartAddingTextAttributeProteinAdditionsToViewForCrispy(int[] a_attrs, string a_id)
         {
-            if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] > m_includesThisProteinFlag && a_id.Contains("Crispy"))
+            if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] > m_includesThisProteinFlag && a_id.Contains(m_crispyIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichCrispyChicken] - 1, MenuItemAttributes.SandwichCrispyChicken);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] > m_excludesThisProteinFlag && !a_id.Contains("Crispy"))
+            else if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] > m_excludesThisProteinFlag && !a_id.Contains(m_crispyIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichCrispyChicken], MenuItemAttributes.SandwichCrispyChicken);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] > m_excludesThisProteinFlag && a_id.Contains("Double"))
+            else if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] > m_excludesThisProteinFlag && a_id.Contains(m_doubleIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichCrispyChicken], MenuItemAttributes.SandwichCrispyChicken);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] == m_excludesThisProteinFlag && a_id.Contains("Crispy"))
+            else if (a_attrs[MenuItemAttributes.SandwichCrispyChicken] == m_excludesThisProteinFlag && a_id.Contains(m_crispyIdentifier))
             {
                 AddTextAttributeNoProteinToView();
             }
@@ -213,15 +229,15 @@ namespace RJOPointOfSale
         /// <param name="a_id">The Entree identifier of the entree.</param>
         private void StartAddingTextAttributeProteinAdditionsToViewForBlackBean(int[] a_attrs, string a_id)
         {
-            if (a_attrs[MenuItemAttributes.SandwichBlackBean] > m_includesThisProteinFlag && a_id.Contains("BB"))
+            if (a_attrs[MenuItemAttributes.SandwichBlackBean] > m_includesThisProteinFlag && a_id.Contains(m_blackBeanIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBlackBean] - 1, MenuItemAttributes.SandwichBlackBean);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichBlackBean] > m_excludesThisProteinFlag && !a_id.Contains("BB"))
+            else if (a_attrs[MenuItemAttributes.SandwichBlackBean] > m_excludesThisProteinFlag && !a_id.Contains(m_blackBeanIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBlackBean], MenuItemAttributes.SandwichBlackBean);
             }
-            else if (a_attrs[MenuItemAttributes.SandwichBlackBean] > m_excludesThisProteinFlag && a_id.Contains("Double"))
+            else if (a_attrs[MenuItemAttributes.SandwichBlackBean] > m_excludesThisProteinFlag && a_id.Contains(m_doubleIdentifier))
             {
                 AddTextAttributeProteinAdditionsToView(a_attrs[MenuItemAttributes.SandwichBlackBean], MenuItemAttributes.SandwichBlackBean);
             }
@@ -286,14 +302,14 @@ namespace RJOPointOfSale
 
             for (int i = 1; i <= MenuItemAttributes.SandwichFriedEgg; i++)
             {
-                if (a_attrs[i] == 0 && a_origAttrs[i] == 1)
+                if (a_attrs[i] == m_excludesThisProteinFlag && a_origAttrs[i] == m_includesThisProteinFlag)
                 {
                     string combinedModAttr = TextAttributeCombinator(MenuItemAttributes.NoAttribute, MenuItemAttributes.attributesDictionary[i]);
                     m_textAttributes.Add(combinedModAttr);
                     m_attrBuilder.AppendLine(combinedModAttr);
 
                 }
-                else if (a_attrs[i] == 1 && a_origAttrs[i] == 0)
+                else if (a_attrs[i] == m_includesThisProteinFlag && a_origAttrs[i] == m_excludesThisProteinFlag)
                 {
                     string combinedModAttr = TextAttributeCombinator(MenuItemAttributes.AddAttribute, MenuItemAttributes.attributesDictionary[i]);
                     m_textAttributes.Add(combinedModAttr);
@@ -352,7 +368,7 @@ namespace RJOPointOfSale
             {
                 for (int i = 0; i < m_entree.ActionModsCount(); i++)
                 {
-                    m_textAttributes.Add("\t**" + m_entree.GetActionModAtIndex(i));
+                    m_textAttributes.Add(m_actionModIdentifier + m_entree.GetActionModAtIndex(i));
                     m_attrBuilder.AppendLine(m_entree.GetActionModAtIndex(i));
                 }
             }

@@ -8,6 +8,15 @@ using System.Windows.Forms;
 
 namespace KitchenScreenClient
 {
+    /// <summary>
+    /// The view for the OnScreenOrder's model. Formats the information from
+    /// the OnScreenOrder to reflect correctness.
+    /// </summary>
+    /// <remarks>
+    /// NAME: OnScreenOrderControl
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public class OnScreenOrderControl : FlowLayoutPanel
     {
         private readonly List<Label> m_activeLabels;

@@ -12,11 +12,30 @@ using RJOPointOfSale.Properties;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// Handles the modification of an entree's attributes. Used so the
+    /// cashier can make any additions or subtractions of ingredients
+    /// from an entree by the request of the customer.
+    /// </summary>
+    /// <remarks>
+    /// NAME: AttributeModification
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public partial class AttributeModification : Form
     {
         private const int m_excludeProteinOptions = 4;
         private const int m_hasAttributeFlag = 1;
         private const int m_emptyAttribute = 0;
+        private const string m_beefIdentifier = "Beef";
+        private const string m_crispyIdentifier = "Crispy";
+        private const string m_grilledIdentifier = "Grilled";
+        private const string m_doubleIdentifier = "Double";
+        private const string m_blackBeanIdentifier = "BB";
+        private const string m_saladIdentifier = "Salad";
+        private const string m_extraIdentifier = "Extra";
+        private const string m_onSideIdentifier = "On Side";
+        private const string m_lightIdentifier = "Light";
 
         private readonly int[] m_attributes = new int[MenuItemAttributes.NumOfAttributes];
         private int[] m_originalAttributes;
@@ -40,8 +59,8 @@ namespace RJOPointOfSale
         }/*public AttributeModification()*/
 
         /// <summary>
-        /// A constructor for the AttributeModification form. Inhertis from the default
-        /// constructor and passes in a Entree as an arugment.
+        /// A constructor for the AttributeModification form. Inherits from the default
+        /// constructor and passes in a Entree as an argument.
         /// Initializes all vital members for the entree modifications.
         /// </summary>
         /// <remarks>
@@ -178,27 +197,31 @@ namespace RJOPointOfSale
             Button addProtein = sender as Button;
             string buttonTag = (string)addProtein.Tag;
 
-            if (buttonTag.Equals("Beef") && !m_entreeToBeModified.EntreeIdentifier.Contains("Double"))
+            if (buttonTag.Equals(m_beefIdentifier) && !m_entreeToBeModified.EntreeIdentifier.Contains(m_doubleIdentifier))
             {
                 m_attributes[MenuItemAttributes.SandwichBeefSingle]++;
             }
-            else if (buttonTag.Equals("Beef") && m_entreeToBeModified.EntreeIdentifier.Contains("Double") && m_attributes[MenuItemAttributes.SandwichBeefDouble] == 1)
+            else if (buttonTag.Equals(m_beefIdentifier) 
+                     && m_entreeToBeModified.EntreeIdentifier.Contains(m_doubleIdentifier) 
+                     && m_attributes[MenuItemAttributes.SandwichBeefDouble] == 1)
             {
                 m_attributes[MenuItemAttributes.SandwichBeefSingle]++;
             }
-            else if (buttonTag.Equals("Beef") && m_entreeToBeModified.EntreeIdentifier.Contains("Double") && m_attributes[MenuItemAttributes.SandwichBeefDouble] == 0)
+            else if (buttonTag.Equals(m_beefIdentifier) 
+                     && m_entreeToBeModified.EntreeIdentifier.Contains(m_doubleIdentifier) 
+                     && m_attributes[MenuItemAttributes.SandwichBeefDouble] == 0)
             {
                 m_attributes[MenuItemAttributes.SandwichBeefDouble]++;
             }
-            else if (buttonTag.Equals("Crispy"))
+            else if (buttonTag.Equals(m_crispyIdentifier))
             {
                 m_attributes[MenuItemAttributes.SandwichCrispyChicken]++;
             }
-            else if (buttonTag.Equals("Grilled"))
+            else if (buttonTag.Equals(m_grilledIdentifier))
             {
                 m_attributes[MenuItemAttributes.SandwichGrilledChicken]++;
             }
-            else if (buttonTag.Equals("BB"))
+            else if (buttonTag.Equals(m_blackBeanIdentifier))
             {
                 m_attributes[MenuItemAttributes.SandwichBlackBean]++;
             }
@@ -227,25 +250,25 @@ namespace RJOPointOfSale
                                   m_attributes[MenuItemAttributes.SandwichBlackBean] +
                                   m_attributes[MenuItemAttributes.SandwichBeefDouble];
 
-            if (returnThreshold == 1 && !m_entreeToBeModified.EntreeIdentifier.Contains("Salad"))
+            if (returnThreshold == 1 && !m_entreeToBeModified.EntreeIdentifier.Contains(m_saladIdentifier))
             {
                 MessageBox.Show(@"If the customer wants NO MEAT on their sandwich, click the NO MEAT button");
                 return;
             }
 
-            if (buttonTag.Equals("Beef") && m_attributes[MenuItemAttributes.SandwichBeefSingle] >= 1)
+            if (buttonTag.Equals(m_beefIdentifier) && m_attributes[MenuItemAttributes.SandwichBeefSingle] >= 1)
             {
                 m_attributes[MenuItemAttributes.SandwichBeefSingle]--;
             }
-            else if (buttonTag.Equals("Crispy") && m_attributes[MenuItemAttributes.SandwichCrispyChicken] >= 1)
+            else if (buttonTag.Equals(m_crispyIdentifier) && m_attributes[MenuItemAttributes.SandwichCrispyChicken] >= 1)
             {
                 m_attributes[MenuItemAttributes.SandwichCrispyChicken]--;
             }
-            else if (buttonTag.Equals("Grilled") && m_attributes[MenuItemAttributes.SandwichGrilledChicken] >= 1)
+            else if (buttonTag.Equals(m_grilledIdentifier) && m_attributes[MenuItemAttributes.SandwichGrilledChicken] >= 1)
             {
                 m_attributes[MenuItemAttributes.SandwichGrilledChicken]--;
             }
-            else if (buttonTag.Equals("BB") && m_attributes[MenuItemAttributes.SandwichBlackBean] >= 1)
+            else if (buttonTag.Equals(m_blackBeanIdentifier) && m_attributes[MenuItemAttributes.SandwichBlackBean] >= 1)
             {
                 m_attributes[MenuItemAttributes.SandwichBlackBean]--;
             }
@@ -311,15 +334,15 @@ namespace RJOPointOfSale
             {
                 ModifyAttribute(selectionTag);
             }
-            else if (conversion && m_extraLightOnSide.Text.Equals("Extra"))
+            else if (conversion && m_extraLightOnSide.Text.Equals(m_extraIdentifier))
             {
                 ModifyAttributeExtraLightOnSide(selectionTag, MenuItemAttributes.ExtraAttribute);
             }
-            else if (conversion && m_extraLightOnSide.Text.Equals("Light"))
+            else if (conversion && m_extraLightOnSide.Text.Equals(m_lightIdentifier))
             {
                 ModifyAttributeExtraLightOnSide(selectionTag, MenuItemAttributes.LightAttribute);
             }
-            else if (conversion && m_extraLightOnSide.Text.Equals("On Side"))
+            else if (conversion && m_extraLightOnSide.Text.Equals(m_onSideIdentifier))
             {
                 ModifyAttributeExtraLightOnSide(selectionTag, MenuItemAttributes.OnSideAttribute);
             }
@@ -328,7 +351,7 @@ namespace RJOPointOfSale
         }/*private void BtnToppings_Click(object sender, EventArgs e)*/
 
         /// <summary>
-        /// The click event for signafying that the customer would like no bun with their order.
+        /// The click event for signifying that the customer would like no bun with their order.
         /// This method clears all bun-related attributes from the attributes array.
         /// </summary>
         /// <remarks>
@@ -442,7 +465,7 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/17/2019
         /// </remarks>
-        /// <param name="sender">The buttton that triggered this event - the Extra, Light or On Side buttons.</param>
+        /// <param name="sender">The button that triggered this event - the Extra, Light or On Side buttons.</param>
         /// <param name="e"></param>
         private void RadioButtonSelection_CheckedChanged(object sender, EventArgs e)
         {
@@ -495,7 +518,7 @@ namespace RJOPointOfSale
         /// </remarks>
         /// <param name="sender">The object that triggered this event - the ListBox.</param>
         /// <param name="e">The DrawItemEventArgs associated with this event.</param>
-        private void lbModifiedEntree_DrawItem(object sender, DrawItemEventArgs e)
+        private void LbModifiedEntree_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
             e.Graphics.DrawString(lbModifiedEntree.Items[e.Index].ToString(), new Font("Arial", 10, FontStyle.Bold), Brushes.Black, e.Bounds);

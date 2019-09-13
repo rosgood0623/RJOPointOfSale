@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The model for the kids meal menu items. A kids meal consists of
+    /// a entree, side and beverage.
+    /// </summary>
+    /// <remarks>
+    /// NAME: KidsMeal
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class KidsMeal : Meal
     {
         private const string m_regularFry = "RgFrenchFry";
         private const string m_kidsSoda = "KidsSoda";
-        private string m_kidsMealBeverage;
-
         public string KidsMealSide { get; set; }
         public string KidsMealBeverage { get; set; }
 
@@ -30,7 +37,7 @@ namespace RJOPointOfSale
         }/*public KidsMeal()*/
 
         /// <summary>
-        /// Generates the default kids meal, which includes a plain cheesebuger, a regular fry
+        /// Generates the default kids meal, which includes a plain cheeseburger, a regular fry
         /// and a kids sized drink.
         /// </summary>
         /// <remarks>
@@ -74,7 +81,7 @@ namespace RJOPointOfSale
         /// AUTHOR: Ryan Osgood
         /// DATE: 8/15/2019
         /// </remarks>
-        /// <param name="a_newBevIdentifier">The string presentation of the deisred beverage.</param>
+        /// <param name="a_newBevIdentifier">The string presentation of the desired beverage.</param>
         public void UpdateKidsMealBeverage(string a_newBevIdentifier)
         {
             RemoveBeverage();

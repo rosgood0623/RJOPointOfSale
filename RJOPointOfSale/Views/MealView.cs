@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The view for the meal model. Parses the model's information
+    /// to make fit for the register main menu.
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class MealView
     {
         private readonly Meal m_customerMeal;
@@ -190,7 +199,7 @@ namespace RJOPointOfSale
         {
             foreach (string str in m_mealDisplay)
             {
-                if (!str.Contains("~") && !str.Equals(""))
+                if (!str.Contains(m_lineBreakForParsing) && !str.Equals(""))
                 {
                     NumberOfDisplayItems++;
                 }

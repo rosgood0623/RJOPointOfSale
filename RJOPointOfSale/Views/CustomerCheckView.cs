@@ -9,6 +9,15 @@ using System.Windows.Forms;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The view for the customer's order information. Determines how
+    /// the customer's order appears on the register's main menu.
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class CustomerCheckView
     {
         private CustomerCheck m_customerCheck;
@@ -20,6 +29,7 @@ namespace RJOPointOfSale
         private const string m_tilde = "~";
         private const string m_lineFeed = "\r";
         private const string m_kidsMeal = "Kids";
+        private const int m_indexOfFirstItem = 0;
 
 
         /// <summary>       
@@ -112,12 +122,28 @@ namespace RJOPointOfSale
             }
         }/*public void RetrieveItemDetails()*/
 
-
+        /// <summary>
+        /// Gets the prices for each meal and adds them to a member list.
+        /// </summary>
+        /// <remarks>
+        /// NAME: CompleteMealPricingForView
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
         private void CompleteMealPricingForView()
         {
             m_pricingOfOrders.AddRange(m_customerCheck.CompilePricingOfOrders());
-        }
+        }/*private void CompleteMealPricingForView()*/
 
+        /// <summary>
+        /// Steps through a list containing all the indexes of the base
+        /// view line to add the price to. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: CompleteMealPricingForView
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
         public void ModifyLinesWithPrices()
         {
             List<int> priceIndexes = MakeSavedIndexesUsefulForPricing();
@@ -128,13 +154,26 @@ namespace RJOPointOfSale
                 m_menuItemsForDisplay[priceIndexes[i]] = target.PadRight(40, ' ') + m_pricingOfOrders[i];
 
             }
+        }/*public void ModifyLinesWithPrices()*/
 
-        }
-
+        /// <summary>
+        /// Uses the saved index list to make a new list that contains
+        /// all the indexes of the base view line for each menu item rung up.
+        /// </summary>
+        /// <remarks>
+        /// NAME: CompleteMealPricingForView
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
+        /// <returns>
+        /// A list of indexes of the view to add the price tag to.
+        /// </returns>
         private List<int> MakeSavedIndexesUsefulForPricing()
         {
-            List<int> newIndexes = new List<int>();
-            newIndexes.Add(0);
+            List<int> newIndexes = new List<int>
+            {
+                m_indexOfFirstItem
+            };
 
             for (int i = 0; i < m_savedIndexesForDisplay.Count; i++)
             {
@@ -143,7 +182,7 @@ namespace RJOPointOfSale
             }
 
             return newIndexes;
-        }
+        }/*private List<int> MakeSavedIndexesUsefulForPricing()*/
 
         /// <summary>
         /// Gets the raw display items from the MealView and parses out
@@ -304,9 +343,7 @@ namespace RJOPointOfSale
                     indexOfSelection = i;
                     break;
                 }
-
             }
-
             return indexOfSelection;
         }/*public int GetIndexOfSelected(int a_value)*/
 

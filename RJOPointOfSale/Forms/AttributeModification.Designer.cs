@@ -830,7 +830,7 @@
             this.lbModifiedEntree.Name = "lbModifiedEntree";
             this.lbModifiedEntree.Size = new System.Drawing.Size(285, 484);
             this.lbModifiedEntree.TabIndex = 4;
-            this.lbModifiedEntree.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbModifiedEntree_DrawItem);
+            this.lbModifiedEntree.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.LbModifiedEntree_DrawItem);
             // 
             // AttributeModification
             // 

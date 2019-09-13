@@ -38,7 +38,6 @@
             this.btnSixth = new System.Windows.Forms.Button();
             this.lbConnectionEstablished = new System.Windows.Forms.Label();
             this.btnEstablishConn = new System.Windows.Forms.Button();
-            this.btnBumpedItems = new System.Windows.Forms.Button();
             this.btnUpArrow = new System.Windows.Forms.Button();
             this.btnDownArrow = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -146,22 +145,13 @@
             // 
             // btnEstablishConn
             // 
-            this.btnEstablishConn.Location = new System.Drawing.Point(863, 605);
+            this.btnEstablishConn.Location = new System.Drawing.Point(774, 605);
             this.btnEstablishConn.Name = "btnEstablishConn";
             this.btnEstablishConn.Size = new System.Drawing.Size(165, 57);
             this.btnEstablishConn.TabIndex = 3;
             this.btnEstablishConn.Text = "Establish Connection With PoS";
             this.btnEstablishConn.UseVisualStyleBackColor = true;
             this.btnEstablishConn.Click += new System.EventHandler(this.Btn_EstablishConnectionWithPoS_Click);
-            // 
-            // btnBumpedItems
-            // 
-            this.btnBumpedItems.Location = new System.Drawing.Point(692, 607);
-            this.btnBumpedItems.Name = "btnBumpedItems";
-            this.btnBumpedItems.Size = new System.Drawing.Size(165, 55);
-            this.btnBumpedItems.TabIndex = 5;
-            this.btnBumpedItems.Text = "Display Previously Bumped Items";
-            this.btnBumpedItems.UseVisualStyleBackColor = true;
             // 
             // btnUpArrow
             // 
@@ -192,7 +182,6 @@
             this.ClientSize = new System.Drawing.Size(1053, 688);
             this.Controls.Add(this.btnDownArrow);
             this.Controls.Add(this.btnUpArrow);
-            this.Controls.Add(this.btnBumpedItems);
             this.Controls.Add(this.btnEstablishConn);
             this.Controls.Add(this.lbConnectionEstablished);
             this.Controls.Add(this.btnSixth);
@@ -225,7 +214,6 @@
         private System.Windows.Forms.Button btnSixth;
         private System.Windows.Forms.Label lbConnectionEstablished;
         private System.Windows.Forms.Button btnEstablishConn;
-        private System.Windows.Forms.Button btnBumpedItems;
         private System.Windows.Forms.Button btnUpArrow;
         private System.Windows.Forms.Button btnDownArrow;
     }

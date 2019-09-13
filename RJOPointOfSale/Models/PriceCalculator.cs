@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RJOPointOfSale
 {
+    
     public class PriceCalculator
     {
-        private Entree m_menuItem;
         private readonly int[] m_copyOfAttrs;
         private readonly int[] m_copyOfOriginalAttrs;
         private const decimal m_premiumToppingPrice = 1.29M;
@@ -20,16 +20,35 @@ namespace RJOPointOfSale
         public decimal BasePrice { get; }
         public decimal AdditionalPricing { get; private set; }
 
+        /// <summary>
+        /// A constructor for PriceCalculator object. Initializes members and prepares them for calculating.
+        /// </summary>
+        /// <remarks>
+        /// NAME: PriceCalculator
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
+        /// <param name="a_entree">The Entree whose price needs calculating</param>
         public PriceCalculator(Entree a_entree)
         {
-            m_menuItem = a_entree;
-            BasePrice = m_menuItem.Price;
-            m_copyOfAttrs = new int[m_menuItem.DecomposeAttributes().Length];
-            m_copyOfOriginalAttrs = new int[m_menuItem.DecomposeOriginalAttributes().Length];
-            Array.Copy(m_menuItem.DecomposeAttributes(), m_copyOfAttrs, m_menuItem.DecomposeAttributes().Length);
-            Array.Copy(m_menuItem.DecomposeOriginalAttributes(), m_copyOfOriginalAttrs, m_menuItem.DecomposeOriginalAttributes().Length);
-        }
+            BasePrice = a_entree.Price;
+            m_copyOfAttrs = new int[a_entree.DecomposeAttributes().Length];
+            m_copyOfOriginalAttrs = new int[a_entree.DecomposeOriginalAttributes().Length];
+            Array.Copy(a_entree.DecomposeAttributes(), m_copyOfAttrs, a_entree.DecomposeAttributes().Length);
+            Array.Copy(a_entree.DecomposeOriginalAttributes(), m_copyOfOriginalAttrs, a_entree.DecomposeOriginalAttributes().Length);
+        }/*public PriceCalculator(Entree a_entree)*/
 
+        /// <summary>
+        /// The main method calls the calculator methods in this object. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: Calculate
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
+        /// <returns>
+        /// Returns the base price of the entree + any price additions via premiums
+        /// </returns>
         public decimal Calculate()
         {
             DecrementSignatureIncludedPremiums();
@@ -42,16 +61,35 @@ namespace RJOPointOfSale
             CalculateCheeseAdditions();
             CalculateProteinAdditions();
             return BasePrice + AdditionalPricing;
-        }
+        } /*public decimal Calculate()*/
 
+        /// <summary>
+        /// Some signatures include premium ingredients and are baked into the base price.
+        /// This method simply decrements all premium additions to make them easier to work
+        /// with.
+        /// </summary>
+        /// <remarks>
+        /// NAME: DecrementSignatureIncludedPremiums
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
         private void DecrementSignatureIncludedPremiums()
         {
             foreach (int premium in MenuItemAttributes.PremiumAttributes)
             {
                 m_copyOfAttrs[premium]--;
             }
-        }
+        }/*private void DecrementSignatureIncludedPremiums()*/
 
+        /// <summary>
+        /// Steps through all the premium toppings indexes and depending on the value
+        /// at that index, determines if there is a price increase necessary.
+        /// </summary>
+        /// <remarks>
+        /// NAME: CalculateToppingsAdditions
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
         private void CalculateToppingsAdditions()
         {
             foreach (int topping in MenuItemAttributes.PremiumAttributesToppings)
@@ -65,8 +103,17 @@ namespace RJOPointOfSale
                     IncreaseAdditionalPricing(m_extraAddition, m_premiumToppingPrice);
                 }
             }
-        }
+        }/*private void CalculateToppingsAdditions()*/
 
+        /// <summary>
+        /// Steps through all the premium cheese indexes and depending on the value
+        /// at that index, determines if there is a price increase necessary. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: CalculateCheeseAdditions
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
         private void CalculateCheeseAdditions()
         {
             foreach (int cheese in MenuItemAttributes.PremiumAttributesCheese)
@@ -80,8 +127,17 @@ namespace RJOPointOfSale
                     IncreaseAdditionalPricing(m_extraAddition, m_premiumCheesePrice);
                 }
             }
-        }
+        }/*private void CalculateCheeseAdditions()*/
 
+        /// <summary>
+        /// Steps through all the premium protein indexes and depending on the value
+        /// at that index, determines if there is a price increase necessary. 
+        /// </summary>
+        /// <remarks>
+        /// NAME: CalculateProteinAdditions
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
         private void CalculateProteinAdditions()
         {
             foreach (int protein in MenuItemAttributes.PremiumAttributesProtein)
@@ -110,11 +166,21 @@ namespace RJOPointOfSale
             {
                 IncreaseAdditionalPricing(m_singleAddition, m_premiumProteinPrice);
             }
-        }
+        }/*private void CalculateProteinAdditions()*/
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// NAME: Calculate
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
+        /// <param name="a_additionType"></param>
+        /// <param name="a_price"></param>
         private void IncreaseAdditionalPricing(int a_additionType, decimal a_price)
         {
             AdditionalPricing += a_price * a_additionType;
-        }
+        }/*private void IncreaseAdditionalPricing(int a_additionType, decimal a_price)*/
     }
 }

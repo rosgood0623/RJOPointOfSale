@@ -7,15 +7,22 @@ using System.Diagnostics;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The model for a customer's order information. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: CustomerCheck
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class CustomerCheck
     {
         private readonly string m_checkID;
-        private int m_checkPrice = 0;
         private readonly List<Meal> m_customerOrders = new List<Meal>();
         private readonly List<List<int>> m_mealMatrix = new List<List<int>>();
         private const int m_itemMissingInMeal = -1;
-        private readonly List<decimal> m_pricingOfOrders = new List<decimal>();
         public string Name { get; set; }
+        public decimal CheckTotal { get; private set; }
         /// <summary>
         /// The default constructor for the CustomerCheck object. Generates a unique
         /// GUID for itself.
@@ -274,6 +281,18 @@ namespace RJOPointOfSale
             return new Tuple<int, int>(targetMeal, itemType);
         }/*public Tuple<int, int> FindMealViaMatrix(int a_selectionIndex)*/
 
+        /// <summary>
+        /// Steps through each meal and adds its price to a list to be returned.
+        /// </summary>
+        /// <remarks>
+        /// NAME: CompilePricingOfOrders
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 9/3/2019
+        /// </remarks>
+        /// <returns>
+        /// A list of prices that correspond to the order in which the menu item
+        /// appears on the till.
+        /// </returns>
         public List<decimal> CompilePricingOfOrders()
         {
             List<decimal> pricing = new List<decimal>();
@@ -285,7 +304,10 @@ namespace RJOPointOfSale
                 }
             }
 
+            CheckTotal = pricing.Sum(x => x);
+
             return pricing;
-        }
+        }/*public List<decimal> CompilePricingOfOrders()*/
+
     }
 }

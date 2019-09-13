@@ -7,6 +7,14 @@ using System.Windows;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The model for the beverage menu item type. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: Beverage
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public class Beverage : MenuItem
     {
         public string BeverageIdentifier { get; private set; }
@@ -29,16 +37,16 @@ namespace RJOPointOfSale
         {
             try
             {
-                conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
+                m_conn = new DatabaseConnection(Properties.Settings.Default.ElephantSQLConnection)
                 {
                     Query = @"SELECT * FROM public.tbl_bevs WHERE tbl_bevs.name = :beverageName"
                 };
 
                 List<PostgresDataSet> data_set = new List<PostgresDataSet>();
-                data_set = conn.QueryBeverageRetrieval(a_productName);
-                numOfRetrievedRows = data_set.Count;
+                data_set = m_conn.QueryBeverageRetrieval(a_productName);
+                m_numOfRetrievedRows = data_set.Count;
 
-                if (numOfRetrievedRows > 0)
+                if (m_numOfRetrievedRows > 0)
                 {
                     BeverageIdentifier = data_set[0].GetAtIndex(m_columnNameIndex);
                     Price = Convert.ToDecimal(data_set[0].GetAtIndex(m_columnPriceIndex));

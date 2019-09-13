@@ -7,6 +7,14 @@ using System.Windows.Media.Media3D;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// A static class which contains often used constants across the entire project.
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public static class MenuItemAttributes
     {
         public const int Initialized = 0;
@@ -47,7 +55,6 @@ namespace RJOPointOfSale
         public const int SandwichGrilledChicken = 35;
         public const int SandwichCrispyChicken = 36;
         public const int SandwichBlackBean = 37;
-
         public const int SandwichNoMeat = 45;
 
         public const int ExtraAttribute = 2;
@@ -76,6 +83,8 @@ namespace RJOPointOfSale
         public const int PremiumAttributeGrilledChicken = 35;
         public const int PremiumAttributeCrispyChicken = 36;
         public const int PremiumAttributeBlackBean = 37;
+
+        
 
         public static int[] PremiumAttributes =
         {

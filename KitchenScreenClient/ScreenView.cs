@@ -6,15 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using RJOPointOfSale;
-using FontStyle = System.Drawing.FontStyle;
 
 namespace KitchenScreenClient
 {
-    class ScreenView
+    /// <summary>
+    /// Handles the view for the Screen. Facilitates compiling and adding orders to the screen
+    /// using the OnScreenOrderControl control.
+    /// </summary>
+    /// <remarks>
+    /// NAME: ScreenView
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
+    public class ScreenView
     {
-        private FlowLayoutPanel m_screen;
-        private List<OnScreenOrderControl> m_onScreen = new List<OnScreenOrderControl>();
+        private readonly FlowLayoutPanel m_screen;
         public int CursorPosition { get; set; }
         /// <summary>
         /// A constructor for the ScreenView object. Passes in the 'screen'
@@ -43,7 +49,7 @@ namespace KitchenScreenClient
         /// the parsed data that will be displayed on the view.</param>
         /// <param name="a_color">The Color of the order, indicating which order the
         /// cursor is currently on.</param>
-        public void AddElementToScreenWithControls(OnScreenOrder a_order, Color a_color)
+        public void AddElementToScreen(OnScreenOrder a_order, Color a_color)
         {
             OnScreenOrderControl newOrderOnScreen = new OnScreenOrderControl{BackColor = a_color};
 

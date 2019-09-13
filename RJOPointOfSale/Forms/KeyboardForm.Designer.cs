@@ -559,6 +559,7 @@
             this.Controls.Add(this.btnGraveAccent);
             this.Controls.Add(this.btnOne);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MinimizeBox = false;
             this.Name = "KeyboardForm";
             this.Text = "Keyboard";

@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// The view for the beverage model. Facilitates how the
+    /// beverage item will appear on the register menu. 
+    /// </summary>
+    /// <remarks>
+    /// NAME: MenuItem
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks>
     public class BeverageView
     {
         private readonly Beverage m_beverage;
@@ -41,8 +50,7 @@ namespace RJOPointOfSale
         public string GetFormattedDetailsForDisplay()
         {
             string formatted = "";
-            string price = Convert.ToString(m_beverage.Price, CultureInfo.CurrentCulture).PadLeft(30);
-
+            
             if (m_beverage.BeverageIdentifier != null)
             {
                 string identifier = m_beverage.BeverageIdentifier;

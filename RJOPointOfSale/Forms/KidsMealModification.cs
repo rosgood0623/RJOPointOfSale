@@ -11,14 +11,22 @@ using RJOPointOfSale.Properties;
 
 namespace RJOPointOfSale
 {
+    /// <summary>
+    /// Similar to the AttributeModification form, but for kids meals. Allows
+    /// editing of the side or beverage choice at the request of the customer.
+    /// </summary>
+    /// <remarks>
+    /// NAME: KidsMealModification
+    /// AUTHOR: Ryan Osgood
+    /// DATE: 9/4/2019
+    /// </remarks> 
     public partial class KidsMealModification : Form
     {
         private readonly KidsMeal m_kidsMealFromMain;
-        private readonly int[] m_attributes = new int[MenuItemAttributes.NumOfAttributes];
         private readonly MealView m_mealView;
         private List<Button> m_buttonAttributes;
-        private List<Button> m_SideButtons;
-        private List<Button> m_BevButtons;
+        private List<Button> m_sideButtons;
+        private List<Button> m_bevButtons;
         private BindingList<string> m_kidsAttributes = new BindingList<string>();
         public string DefaultSide { get; set; }
         public string DefaultBev { get; set; }
@@ -26,7 +34,7 @@ namespace RJOPointOfSale
         public string CurrentlyChosenBev { get; set; }
 
         /// <summary>
-        /// The defualt constructor for the KidsMealModification. Initializes the components.
+        /// The default constructor for the KidsMealModification. Initializes the components.
         /// </summary>
         /// <remarks>
         /// NAME: KidsMealModification
@@ -53,7 +61,6 @@ namespace RJOPointOfSale
         public KidsMealModification(KidsMeal a_kidsMeals) : this()
         {
             m_kidsMealFromMain = a_kidsMeals;
-            m_attributes = m_kidsMealFromMain.GetEntree().DecomposeAttributes();
             m_mealView = new MealView(m_kidsMealFromMain);
 
             PerformViewFormatting();
@@ -113,8 +120,8 @@ namespace RJOPointOfSale
         } /*private void CompleteButtonDisplay()*/
 
         /// <summary>
-        /// Sorts the attribute buttons into thier respective lists
-        /// and sets the properties approriate for an background image. 
+        /// Sorts the attribute buttons into their respective lists
+        /// and sets the properties appropriate for an background image. 
         /// </summary>
         /// <remarks>
         /// NAME: GenerateAttributeButtonListAndSetProperties
@@ -125,20 +132,19 @@ namespace RJOPointOfSale
         {
             m_buttonAttributes = new List<Button>
             {
-                btnNoBun, btnClassicBun, btnGlutenFree, btnRegFry, btnTots,
-                btnSweetFry, btnRegSmashFry, btnSmashTots, btnRegSweetSmashFry,
+                btnRegFry, btnTots, btnSweetFry, btnRegSmashFry, btnSmashTots, btnRegSweetSmashFry,
                 btnBrussels, btnSideSalad, btnKidsSoda, btnKidsMilk, btnKidsChocMilk,
                 btnKidsApple, btnPButterShake, btnVanillaShake, btnChocolateShake,
                 btnStrawberryShake, btnOreoShake, btnSaltedCaramelShake
             };
 
-            m_SideButtons = new List<Button>
+            m_sideButtons = new List<Button>
             {
                 btnRegFry, btnTots, btnSweetFry, btnRegSmashFry,
                 btnSmashTots, btnRegSweetSmashFry, btnBrussels, btnSideSalad,
             };
 
-            m_BevButtons = new List<Button>
+            m_bevButtons = new List<Button>
             {
                 btnKidsSoda, btnKidsMilk, btnKidsChocMilk,
                 btnKidsApple, btnPButterShake, btnVanillaShake, btnChocolateShake,
@@ -225,7 +231,7 @@ namespace RJOPointOfSale
         /// </remarks>
         private void ClearAllSideBackgroundImages()
         {
-            foreach (Button button in m_SideButtons)
+            foreach (Button button in m_sideButtons)
             {
                 button.BackgroundImage = null;
             }
@@ -241,7 +247,7 @@ namespace RJOPointOfSale
         /// </remarks>
         private void ClearAllBevBackgroundImages()
         {
-            foreach (Button button in m_BevButtons)
+            foreach (Button button in m_bevButtons)
             {
                 button.BackgroundImage = null;
             }
@@ -249,7 +255,7 @@ namespace RJOPointOfSale
 
         /// <summary>
         /// Depending on the selections and original meal side ,
-        /// reinitializes the background images of each of the side buttons.
+        /// re-initializes the background images of each of the side buttons.
         /// </summary>
         /// <remarks>
         /// NAME: ReinitializeSideButtonBackgroundImages
@@ -260,22 +266,22 @@ namespace RJOPointOfSale
         {
             if (!DefaultSide.Equals(CurrentlyChosenSide))
             {
-                Button notDefault = m_SideButtons.Find(x => x.Tag.Equals(DefaultSide));
+                Button notDefault = m_sideButtons.Find(x => x.Tag.Equals(DefaultSide));
                 notDefault.BackgroundImage = Resources.RedX;
 
-                Button currentlySelected = m_SideButtons.Find(x => x.Tag.Equals(CurrentlyChosenSide));
+                Button currentlySelected = m_sideButtons.Find(x => x.Tag.Equals(CurrentlyChosenSide));
                 currentlySelected.BackgroundImage = Resources.green_check_icon_png_4;
             }
             else
             {
-                Button currentlySelected = m_SideButtons.Find(x => x.Tag.Equals(CurrentlyChosenSide));
+                Button currentlySelected = m_sideButtons.Find(x => x.Tag.Equals(CurrentlyChosenSide));
                 currentlySelected.BackgroundImage = Resources.green_check_icon_png_4;
             }
         }/*private void ReinitializeSideButtonBackgroundImages()*/
 
         /// <summary>
         /// Depending on the selections and original meal beverage,
-        /// reinitializes the background images of each of the beverage buttons.
+        /// re-initializes the background images of each of the beverage buttons.
         /// </summary>
         /// <remarks>
         /// NAME: ReinitializeBeverageButtonBackgroundImages
@@ -286,15 +292,15 @@ namespace RJOPointOfSale
         {
             if (!DefaultBev.Equals(CurrentlyChosenBev))
             {
-                Button notDefault = m_BevButtons.Find(x => x.Tag.Equals(DefaultBev));
+                Button notDefault = m_bevButtons.Find(x => x.Tag.Equals(DefaultBev));
                 notDefault.BackgroundImage = Resources.RedX;
 
-                Button currentlySelected = m_BevButtons.Find(x => x.Tag.Equals(CurrentlyChosenBev));
+                Button currentlySelected = m_bevButtons.Find(x => x.Tag.Equals(CurrentlyChosenBev));
                 currentlySelected.BackgroundImage = Resources.green_check_icon_png_4;
             }
             else
             {
-                Button currentlySelected = m_BevButtons.Find(x => x.Tag.Equals(CurrentlyChosenBev));
+                Button currentlySelected = m_bevButtons.Find(x => x.Tag.Equals(CurrentlyChosenBev));
                 currentlySelected.BackgroundImage = Resources.green_check_icon_png_4;
             }
         }/*private void ReinitializeBeverageButtonBackgroundImages()*/
