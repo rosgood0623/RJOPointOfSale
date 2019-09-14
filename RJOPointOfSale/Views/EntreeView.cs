@@ -299,7 +299,6 @@ namespace RJOPointOfSale
         /// <param name="a_origAttrs">The original attributes of the sandwich.</param>
         private void AddTextAttributeModificationsToView(int[] a_attrs, int[] a_origAttrs)
         {
-
             for (int i = 1; i <= MenuItemAttributes.SandwichFriedEgg; i++)
             {
                 if (a_attrs[i] == m_excludesThisProteinFlag && a_origAttrs[i] == m_includesThisProteinFlag)

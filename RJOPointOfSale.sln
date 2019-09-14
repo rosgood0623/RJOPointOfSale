@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RJOPointOfSale", "RJOPointOfSale\RJOPointOfSale.csproj", "{9E488DEC-F977-41CB-952E-814DCC8A2E2D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{84016B9A-7680-400B-A374-E61FC8CE9D07} = {84016B9A-7680-400B-A374-E61FC8CE9D07}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenScreenClient", "KitchenScreenClient\KitchenScreenClient.csproj", "{84016B9A-7680-400B-A374-E61FC8CE9D07}"
 EndProject

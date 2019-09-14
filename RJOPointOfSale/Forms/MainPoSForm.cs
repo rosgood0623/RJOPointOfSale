@@ -1015,14 +1015,24 @@ namespace RJOPointOfSale
         /// <returns>
         /// Returns the full relative path of the machine that the program is being ran on.
         /// </returns>
-        private string ParseRelativePath()
+        private static string ParseRelativePath()
         {
-            string startPath = Application.StartupPath;
-            int endIndex = startPath.IndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
-            string partialPath = startPath.Substring(0, endIndex);
-            string relativePath = partialPath + @"\RJOPointOfSale\KitchenScreenClient\bin\Debug\KitchenScreenClient.exe";
+            string relativePath = null;
+            try
+            {
+                string startPath = Application.StartupPath;
+                int endIndex = startPath.IndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
+                string partialPath = startPath.Substring(0, endIndex);
+                relativePath = partialPath + @"\RJOPointOfSale\KitchenScreenClient\bin\Debug\KitchenScreenClient.exe";
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+
+                MessageBox.Show(e.Message + "\n" + Application.StartupPath);
+            }
 
             return relativePath;
+
         }/*private string ParseRelativePath()*/
 
         /// <summary>

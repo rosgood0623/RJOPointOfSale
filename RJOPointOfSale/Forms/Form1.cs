@@ -198,7 +198,7 @@ namespace RJOPointOfSale
         /// <param name="e">The EventArgs associated with this program. </param>
         private void Btn_CloseProgram(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
         }
     }
 }
