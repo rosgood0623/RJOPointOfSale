@@ -1047,7 +1047,6 @@ namespace RJOPointOfSale
         {
             
             string startPath = Application.StartupPath;
-            //int endIndex = startPath.IndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
             int endIndex = startPath.LastIndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
             string[] dirs = Directory.GetDirectories(startPath.Substring(0, endIndex), "KitchenScreenClient", SearchOption.AllDirectories);
             string desiredDir = string.Empty;
