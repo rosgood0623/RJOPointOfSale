@@ -1004,38 +1004,6 @@ namespace RJOPointOfSale
         }/*private void MainPoSForm_VisibleChanged(object sender, EventArgs e)*/
 
         /// <summary>
-        /// The goal of this method is to have a system-independent way to get the
-        /// path to the KitchenScreenClient.
-        /// </summary>
-        /// <remarks>
-        /// NAME: ParseRelativePath
-        /// AUTHOR: Ryan Osgood
-        /// DATE: 8/13/2019
-        /// </remarks>
-        /// <returns>
-        /// Returns the full relative path of the machine that the program is being ran on.
-        /// </returns>
-        private static string ParseRelativePath()
-        {
-            string relativePath = null;
-            try
-            {
-                string startPath = Application.StartupPath;
-                int endIndex = startPath.IndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
-                string partialPath = startPath.Substring(0, endIndex);
-                relativePath = partialPath + @"\RJOPointOfSale\KitchenScreenClient\bin\Debug\KitchenScreenClient.exe";
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-
-                MessageBox.Show(e.Message + "\n" + Application.StartupPath);
-            }
-
-            return relativePath;
-
-        }/*private string ParseRelativePath()*/
-
-        /// <summary>
         /// Uses the relative path from ParseRelativePath to run the KitchenScreensClient.
         /// </summary>
         /// <remarks>
@@ -1062,6 +1030,41 @@ namespace RJOPointOfSale
                 m_sisterApplicationID = sister.Id;
             }
         }/*private void LaunchSisterApplication()*/
+
+        /// <summary>
+        /// The goal of this method is to have a system-independent way to get the
+        /// path to the KitchenScreenClient.
+        /// </summary>
+        /// <remarks>
+        /// NAME: ParseRelativePath
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/13/2019
+        /// </remarks>
+        /// <returns>
+        /// Returns the full relative path of the machine that the program is being ran on.
+        /// </returns>
+        private static string ParseRelativePath()
+        {
+            
+            string startPath = Application.StartupPath;
+            //int endIndex = startPath.IndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
+            int endIndex = startPath.LastIndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
+            string[] dirs = Directory.GetDirectories(startPath.Substring(0, endIndex), "KitchenScreenClient", SearchOption.AllDirectories);
+            string desiredDir = string.Empty;
+
+            foreach (string s in dirs)
+            {
+                if (s.Contains("KitchenScreenClient"))
+                {
+                    desiredDir = s;
+                }
+            }
+
+            string relativePath = desiredDir + @"\bin\Debug\KitchenScreenClient.exe";
+                
+            return relativePath;
+
+        }/*private string ParseRelativePath()*/
 
         /// <summary>
         /// Fires when the user clicks the Exit button. Simulates exiting but actually Hide()s.
