@@ -38,6 +38,22 @@ namespace RJOPointOfSale
         } /*public Form1()*/
 
         /// <summary>
+        /// Retrieve the employee code entered by the user.
+        /// </summary>
+        /// <remarks>
+        /// NAME: GetEnteredCode
+        /// AUTHOR: Ryan Osgood
+        /// DATE: 8/17/2019
+        /// </remarks>
+        /// <returns>
+        /// The employee coded entered by the user.
+        /// </returns>
+        public int GetEnteredCode()
+        {
+            return m_enteredCode;
+        }
+
+        /// <summary>
         /// The Load event for Form1. This event is performed after the object is
         /// initialized. Establishes this form's DatabaseConnection object.
         /// </summary>
@@ -126,7 +142,7 @@ namespace RJOPointOfSale
                 }
                 else if (m_maxRows > 0 && m_serializedForm != null)
                 {
-                    MainPoSForm newMainPoSForm = new MainPoSForm();
+                    MainPoSForm newMainPoSForm = new MainPoSForm(m_enteredCode);
                     newMainPoSForm = m_serializedForm;
                     newMainPoSForm.Show();
                     Hide();

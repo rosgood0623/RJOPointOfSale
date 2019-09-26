@@ -43,7 +43,7 @@ namespace RJOPointOfSale
         private int m_numOfSentLines = 0;
 
 
-        private readonly int m_employeeCode;
+        private int m_employeeCode;
 
         private RadioButton m_selectedSignature;
 
@@ -619,7 +619,7 @@ namespace RJOPointOfSale
         /// <param name="e">The EventArgs of the event.</param>
         private void BtnDeleteItem_Click(object sender, EventArgs e)
         {
-            if (ValidateDeleteAction()) { return;}
+            if (ValidateDeleteAction()) return;
 
             Tuple<int, int> mealTuple = GetDisplaySelection();
             bool voidOrDelete = DetermineIfVoidOrDelete(mealTuple.Item1);
@@ -1001,6 +1001,11 @@ namespace RJOPointOfSale
             {
                 LaunchSisterApplication();
             }
+
+            m_employeeCode = m_enterCodeForm.GetEnteredCode();
+            RecognizeEmployee();
+            RecognizeEmployeeTitle();
+
         }/*private void MainPoSForm_VisibleChanged(object sender, EventArgs e)*/
 
         /// <summary>
@@ -1049,7 +1054,7 @@ namespace RJOPointOfSale
             string startPath = Application.StartupPath;
             int endIndex = startPath.LastIndexOf(@"\RJOPointOfSale\", StringComparison.Ordinal);
             string[] dirs = Directory.GetDirectories(startPath.Substring(0, endIndex), "KitchenScreenClient", SearchOption.AllDirectories);
-            string desiredDir = string.Empty;
+            string desiredDir = dirs[0];
 
             foreach (string s in dirs)
             {
@@ -1079,8 +1084,6 @@ namespace RJOPointOfSale
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Hide();
-            //KillSisterProcess();
-            //m_sisterApplicationID = 0;
             m_enterCodeForm.Show(this);
         }/*private void BtnExit_Click(object sender, EventArgs e)*/
 
