@@ -28,7 +28,8 @@ namespace RJOPointOfSale
 
         private const string m_tilde = "~";
         private const string m_lineFeed = "\r";
-        private const string m_kidsMeal = "Kids";
+        private const string m_kidsMealCheese = "KidsCheese";
+        private const string m_kidsMealHam = "KidsHam";
         private const int m_indexOfFirstItem = 0;
 
 
@@ -362,7 +363,7 @@ namespace RJOPointOfSale
             int numOfAttrs = 0;
             foreach (string split in a_splitsForDisplay)
             {
-                if (split.Contains(m_kidsMeal))
+                if (split.Contains(m_kidsMealCheese) || split.Contains(m_kidsMealHam))
                 {
                     numOfAttrs += 3;
                     break;

@@ -203,7 +203,7 @@ namespace KitchenScreenClient
         {
             a_voidMessage = a_voidMessage.Replace("VOID\n", string.Empty);
             string[] parsed = a_voidMessage.Split('\n');
-
+            parsed = parsed.Where(x => !string.IsNullOrEmpty(x)).ToArray();
             foreach (OnScreenOrder o in m_customerOrders)
             {
                 if (o.CompareCheckGUID(parsed[1]) && o.DetermineIfVoidBelongs(parsed))

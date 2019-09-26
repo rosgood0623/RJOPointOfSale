@@ -74,7 +74,8 @@ namespace KitchenScreenClient
         /// <param name="a_enumerable">The list to make proper.</param>
         private static void MakeListProper(List<string> a_enumerable)
         {
-            for (int i = 0; i < a_enumerable.Count(); i++)
+            a_enumerable = a_enumerable.Where(x => !string.IsNullOrEmpty(x)).ToList();
+            for (int i = 0; i < a_enumerable.Count; i++)
             {
                 if (a_enumerable.ElementAt(i).Contains('\t'))
                 {
@@ -82,6 +83,7 @@ namespace KitchenScreenClient
                     a_enumerable[i] = "    " + a_enumerable[i];
                 }
             }
+
         } /*private static void MakeListProper(List<string> a_enumerable)*/
 
         /// <summary>
@@ -147,7 +149,7 @@ namespace KitchenScreenClient
         public void AddVoidElements(string a_voidMessage)
         {
             string[] parsed = a_voidMessage.Split('\n');
-            Array.Resize(ref parsed, parsed.Length-1);
+            
             List<string> parsedList = new List<string>(parsed);
             MakeListProper(parsedList);
 
@@ -237,7 +239,6 @@ namespace KitchenScreenClient
         /// </returns>
         public bool DetermineIfVoidBelongs(string[] a_parsedData)
         {
-            Array.Resize(ref a_parsedData, a_parsedData.Length - 1);
             List<string> listedParsed = new List<string>(a_parsedData);
             listedParsed.RemoveAt(1);
             MakeListProper(listedParsed);
